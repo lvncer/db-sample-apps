@@ -1,5 +1,3 @@
-
-
 # 入力したユーザ名がusersテーブルに存在しているか確認
 def find_by_name_user(cursor, name):
     # あとから設定したい値には%sに置き換える

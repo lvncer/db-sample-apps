@@ -1,5 +1,16 @@
 # CLI Apps with MySQL
 
+## Dependencies
+
+- Python 3.13
+
+## Activating Python Virtual Enviroments
+
+```python
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
 ## Installing Python Modules
 
 ```bash

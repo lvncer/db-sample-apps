@@ -15,8 +15,6 @@ from db import access_weight_records
 
 
 def execute():
-
-    # mysqlに接続
     cnx = db_util.connect()
 
     try:
@@ -25,7 +23,6 @@ def execute():
 
         print('*** 体重記録 ***')
 
-        # 2) キーボードから入力させる
         name = input_util.input_replace('ユーザ名を入力してください : ')
 
         # 入力したユーザ名がusersテーブルに存在しているか確認
