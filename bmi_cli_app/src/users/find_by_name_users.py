@@ -1,15 +1,11 @@
 # ユーザ検索プログラム
 # usersテーブルからキーボードで入力したユーザ名を条件にレコードを取得して表示
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import mysql.connector
-from util import db_util
-from util import input_util
-from db import access_users
+
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
 
 
 def execute():

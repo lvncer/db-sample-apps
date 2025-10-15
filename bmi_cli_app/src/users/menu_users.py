@@ -1,17 +1,12 @@
 # ユーザ管理プログラム
 # キーボードで入力した情報でusersモジュールを呼び出す
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from users import create_user
-from users import find_by_name_users
-from users import update_height
-from users import update_target_weight
-from users import delete_user
-from util import input_util
+from . import create_user
+from . import find_by_name_users
+from . import update_height
+from . import update_target_weight
+from . import delete_user
+from ..util import input_util
 
 
 def execute():

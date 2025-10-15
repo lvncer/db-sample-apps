@@ -1,16 +1,11 @@
 # 学生管理プログラム
 # キーボードで入力した情報でstudentテーブルを操作
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from weight_records import record_weight
-from weight_records import show_records
-from weight_records import delete_record
-from weight_records import output_records
-from util import input_util
+from . import record_weight
+from . import show_records
+from . import delete_record
+from . import output_records
+from ..util import input_util
 
 
 def execute():
