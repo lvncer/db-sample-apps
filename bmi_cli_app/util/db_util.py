@@ -87,41 +87,11 @@ def calc_remain_target(weight_kg, target_weight):
 
 
 def play_sound(texts):
-    import numpy as np
-    import pyaudio
     import time
-    import random
 
-    frequencies = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88]
-
-    # PyAudio の設定
-    fs = 44100  # サンプルレート
-    duration = 0.05  # 秒
-
-    # PyAudio オブジェクトの作成
-    p = pyaudio.PyAudio()
-    # ストリームの開始
-    stream = p.open(format=pyaudio.paFloat32, channels=1, rate=fs, output=True)
-
-    # 各音階の正弦波を生成し、再生
     for text in texts:
         for n in text:
             print(n, end="")
-            freq_num = random.randint(0, len(frequencies) - 1)
-            samples = (
-                np.sin(
-                    2 * np.pi * np.arange(fs * duration) * frequencies[freq_num] / fs
-                )
-            ).astype(np.float32)
-            stream.write(samples.tobytes())
 
         print()
         time.sleep(1)
-        samples = (np.sin(2 * np.pi * np.arange(fs * duration) * 250 / fs)).astype(
-            np.float32
-        )
-        stream.write(samples.tobytes())
-
-    # ストリームの終了
-    stream.stop_stream()
-    stream.close()
