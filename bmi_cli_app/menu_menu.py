@@ -10,8 +10,6 @@ from util import input_util
 
 def execute():
     print("=== メイン メニュー ===")
-
-    # メニューの表示
     print_menu()
 
     while True:

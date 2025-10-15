@@ -18,20 +18,15 @@ from db import access_weight_records
 
 
 def execute():
-    # mysqlに接続
-    cnx = db_util.connect()
-
     try:
-        # カーソルを作成
+        # mysqlに接続
+        cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
-        print('記録出力')
+        print("記録出力")
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
-
-        # 指定された日付の形式で入力させる [%Y-%m]
         date = input_util.input_month("出力する年月を入力してください:")
-        # 入力された月のはじめをdateに入れる
         date = date + "-01"
 
         # データベースから該当する体重記録を全件取得
@@ -41,14 +36,12 @@ def execute():
         output_html(rows)
 
         print()
-        print('ファイルに出力しました')
+        print("ファイルに出力しました")
         print()
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
-
-    # 5) 終了処理
 
     finally:
         cursor.close()
@@ -94,21 +87,21 @@ def output_html(rows):
 
         # selectしたレコードを出力
         for row in rows:
-            height_cm = float(row['height'])
-            weight_kg = float(row['weight'])
-            target_weight = float(row['target_weight'])
-            birthday = row['birthday']
+            height_cm = float(row["height"])
+            weight_kg = float(row["weight"])
+            target_weight = float(row["target_weight"])
+            birthday = row["birthday"]
 
             # 身長をセンチからメートル単位に変更する
             height_m = height_cm / 100
 
             # BMI計算
-            bmi = weight_kg / (height_m ** 2.0)
+            bmi = weight_kg / (height_m**2.0)
             # 小数点以下第1桁まで表示する
             bmi = round(bmi, 1)
 
             # 標準体重計算
-            standard_weight = height_m ** 2 * 22
+            standard_weight = height_m**2 * 22
             # 小数点以下第1桁まで表示する
             standard_weight = round(standard_weight, 1)
 
@@ -116,20 +109,18 @@ def output_html(rows):
             d_today = datetime.datetime.now()
 
             # 年齢を計算する
-            age = d_today.year - birthday.year - (
-                (d_today.month, d_today.day) < (birthday.month, birthday.day)
+            age = (
+                d_today.year
+                - birthday.year
+                - ((d_today.month, d_today.day) < (birthday.month, birthday.day))
             )
 
             # BMIによる肥満度の判定
             fat_level = db_util.calc_fat_level(bmi, age)
 
-            remain_standard = db_util.calc_remain_standard(
-                weight_kg, standard_weight
-            )
+            remain_standard = db_util.calc_remain_standard(weight_kg, standard_weight)
 
-            remain_target = db_util.calc_remain_target(
-                weight_kg, target_weight
-            )
+            remain_target = db_util.calc_remain_target(weight_kg, target_weight)
 
             file.write("<tr>\n")
             file.write(f"<td>{row['id']}\n")
@@ -146,8 +137,10 @@ def output_html(rows):
 
         # グラフの埋め込み
         file.write("<h2>体重の変化</h2>")
-        file.write('<img src="data:image/png;base64,{}" alt="体重の変化">'.format(
-            plot_weight_changes(rows))
+        file.write(
+            '<img src="data:image/png;base64,{}" alt="体重の変化">'.format(
+                plot_weight_changes(rows)
+            )
         )
 
         file.write("</body>\n")
@@ -156,27 +149,27 @@ def output_html(rows):
 
 def plot_weight_changes(rows):
     # 体重の変化をグラフに描画
-    dates = [row['record_date'] for row in rows]
-    weights = [float(row['weight']) for row in rows]
+    dates = [row["record_date"] for row in rows]
+    weights = [float(row["weight"]) for row in rows]
 
     plt.figure(figsize=(10, 5))
 
     # フォントの指定
     font_path = "C:/Windows/Fonts/msgothic.ttc"
     font_prop = FontProperties(fname=font_path)
-    plt.rcParams['font.family'] = font_prop.get_name()
+    plt.rcParams["font.family"] = font_prop.get_name()
 
-    plt.plot(dates, weights, marker='o')
-    plt.title('体重の変化')
-    plt.xlabel('日付')
-    plt.ylabel('体重(kg)')
+    plt.plot(dates, weights, marker="o")
+    plt.title("体重の変化")
+    plt.xlabel("日付")
+    plt.ylabel("体重(kg)")
     plt.grid(True)
 
     # グラフをバイト列に変換してbase64エンコード
     img_data = BytesIO()
-    plt.savefig(img_data, format='png')
+    plt.savefig(img_data, format="png")
     img_data.seek(0)
-    img_base64 = base64.b64encode(img_data.read()).decode('utf-8')
+    img_base64 = base64.b64encode(img_data.read()).decode("utf-8")
 
     plt.close()  # メモリリークを防ぐためにクローズ
 

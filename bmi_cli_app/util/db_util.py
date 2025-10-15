@@ -28,7 +28,6 @@ def confirming(prompt):
 def calc_fat_level(bmi, age):
     fat_level = ""
 
-    # 年齢が18歳未満の場合は肥満度を計算しない
     if age < 18:
         fat_level = "未計算"
     elif 18 <= age < 50:
