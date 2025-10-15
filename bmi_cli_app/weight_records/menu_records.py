@@ -6,10 +6,10 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from weight_records import w1_record_weight
-from weight_records import w2_show_records
-from weight_records import w3_delete_record
-from weight_records import w4_output_records
+from weight_records import record_weight
+from weight_records import show_records
+from weight_records import delete_record
+from weight_records import output_records
 from util import input_util
 
 
@@ -25,13 +25,13 @@ def execute():
 
         # 番号によってモジュールの関数を実行
         if no == 1:
-            w1_record_weight.execute()
+            record_weight.execute()
         elif no == 2:
-            w2_show_records.execute()
+            show_records.execute()
         elif no == 3:
-            w3_delete_record.execute()
+            delete_record.execute()
         elif no == 4:
-            w4_output_records.execute()
+            output_records.execute()
         else:
             print("操作を終了します")
             print()

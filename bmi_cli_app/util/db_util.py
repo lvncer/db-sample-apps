@@ -1,5 +1,3 @@
-# データベースに接続します
-
 import mysql.connector
 
 
@@ -95,9 +93,7 @@ def play_sound(texts):
     import time
     import random
 
-    frequencies = [
-        261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88
-    ]
+    frequencies = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88]
 
     # PyAudio の設定
     fs = 44100  # サンプルレート
@@ -113,18 +109,16 @@ def play_sound(texts):
         for n in text:
             print(n, end="")
             freq_num = random.randint(0, len(frequencies) - 1)
-            samples = (np.sin(
-                2 * np.pi * np.arange(fs * duration) * frequencies[freq_num] / fs)
-                ).astype(
-                np.float32
-            )
+            samples = (
+                np.sin(
+                    2 * np.pi * np.arange(fs * duration) * frequencies[freq_num] / fs
+                )
+            ).astype(np.float32)
             stream.write(samples.tobytes())
 
         print()
         time.sleep(1)
-        samples = (np.sin(
-            2 * np.pi * np.arange(fs * duration) * 250 / fs)
-            ).astype(
+        samples = (np.sin(2 * np.pi * np.arange(fs * duration) * 250 / fs)).astype(
             np.float32
         )
         stream.write(samples.tobytes())
