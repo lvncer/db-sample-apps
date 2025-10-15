@@ -1,6 +1,3 @@
-# 体重記録プログラム
-# キーボードで入力した情報をweight_recordsテーブルに登録する
-
 import datetime
 import mysql.connector
 

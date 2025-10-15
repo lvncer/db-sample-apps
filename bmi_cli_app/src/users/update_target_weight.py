@@ -1,6 +1,3 @@
-# 目標体重更新プログラム
-# キーボードで入力した情報をusersテーブルに更新する
-
 import mysql.connector
 
 from ..util import db_util

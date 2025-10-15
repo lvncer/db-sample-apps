@@ -1,6 +1,3 @@
-# ユーザ管理プログラム
-# キーボードで入力した情報でusersモジュールを呼び出す
-
 from . import create_user
 from . import find_by_name_users
 from . import update_height

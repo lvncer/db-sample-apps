@@ -1,6 +1,3 @@
-# 学生管理プログラム
-# キーボードで入力した情報でstudentテーブルを操作
-
 from . import record_weight
 from . import show_records
 from . import delete_record
@@ -10,12 +7,9 @@ from ..util import input_util
 
 def execute():
     print("=== 体重管理 メニュー ===")
-
-    # メニューの表示
     print_menu()
 
     while True:
-        # キーボードからメニュー番号を入力させる
         no = input_util.input_int("メニューを選択してください : ")
 
         # 番号によってモジュールの関数を実行

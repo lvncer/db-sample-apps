@@ -1,6 +1,3 @@
-# ユーザ削除プログラム
-# キーボードで入力した情報をusersテーブルから削除する
-
 import mysql.connector
 
 from ..util import db_util
@@ -38,7 +35,6 @@ def execute():
             print(f"体重記録: {len(record_rows)}件")
             print()
 
-            # 削除確認
             result_confirm = db_util.confirming(
                 "このデータをすべて削除してもよろしいですか？(y/n): "
             )
@@ -52,7 +48,6 @@ def execute():
 
                 # 指定された名前のユーザをusersテーブルから削除する
                 access_users.delete_user(cursor, name)
-
                 cnx.commit()
 
                 print("削除しました")

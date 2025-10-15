@@ -1,6 +1,3 @@
-# ユーザ検索プログラム
-# usersテーブルからキーボードで入力したユーザ名を条件にレコードを取得して表示
-
 import mysql.connector
 
 from ..util import db_util

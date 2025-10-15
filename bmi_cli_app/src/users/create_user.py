@@ -1,6 +1,3 @@
-# ユーザー登録プログラム
-# キーボードで入力した情報をusersテーブルに登録する
-
 import mysql.connector
 
 from ..util import db_util
