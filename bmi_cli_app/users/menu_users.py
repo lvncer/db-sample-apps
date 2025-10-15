@@ -16,8 +16,6 @@ from util import input_util
 
 def execute():
     print("=== ユーザ管理 メニュー ===")
-
-    # メニューの表示
     print_menu()
 
     while True:

@@ -14,14 +14,11 @@ from db import access_weight_records
 
 
 def execute():
-    # mysqlに接続
-    cnx = db_util.connect()
-
     try:
-        # カーソルを作成
+        # mysqlに接続
+        cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
-        # 2) キーボードから入力させる
         print("*** ユーザ削除 ***")
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
@@ -30,7 +27,6 @@ def execute():
         rows = access_users.find_by_name_user(cursor, name)
 
         if len(rows) != 0:
-
             # 削除対象の表示
             for row in rows:
                 print()
@@ -43,16 +39,15 @@ def execute():
             # 該当するユーザ名の体重記録を取得する
             record_rows = access_users.find_weight_records(cursor, name)
 
-            # 体重記録の件数を表示する
             print(f"体重記録: {len(record_rows)}件")
             print()
 
-            # 削除確認（Yを入力すると削除が確定される)
-            result_confirm = db_util.confirming("このデータをすべて削除してもよろしいですか？(y/n): ")
+            # 削除確認
+            result_confirm = db_util.confirming(
+                "このデータをすべて削除してもよろしいですか？(y/n): "
+            )
 
-            # Yが入力されたならば以下を実行する
             if result_confirm:
-
                 # 削除するユーザ名からweight_recordsテーブルのidを取得する
                 delete_id = access_users.find_id_by_name(cursor, name)
 
@@ -62,27 +57,22 @@ def execute():
                 # 指定された名前のユーザをusersテーブルから削除する
                 access_users.delete_user(cursor, name)
 
-                # 5) 結果を表示
                 cnx.commit()
 
-                print('削除しました')
+                print("削除しました")
                 print()
 
-            # nが入力されたならば以下を実行する
             else:
                 print("削除をキャンセルしました")
                 print()
 
         else:
-            # 入力したユーザが存在しないので再入力させる
             print("[Error] そのユーザ名は存在しません")
             print()
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
-
-    # 6) 終了処理
 
     finally:
         cursor.close()

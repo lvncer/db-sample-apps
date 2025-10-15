@@ -13,29 +13,23 @@ from db import access_users
 
 
 def execute():
-    # mysqlに接続
-    cnx = db_util.connect()
-
     try:
-        # カーソルを作成
+        # mysqlに接続
+        cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
         text = []
 
         print("*** ユーザ情報検索 ***")
 
-        # 2) キーボードから入力させる
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        # 4) sqlを実行する
         rows = access_users.find_by_name_user(cursor, name)
 
-        # 5) 取得したレコードを表示
         if len(rows) != 0:
             for row in rows:
                 print()
 
-                # ユーザ情報をリストに追加する
                 text.append(f"ユーザ名: {row['name']}")
                 text.append(f"生年月日: {row['birthday']}")
                 text.append(f"身長: {row['height']} cm")
@@ -51,8 +45,6 @@ def execute():
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
-
-    # 6) 終了処理
 
     finally:
         cursor.close()
