@@ -1,20 +1,16 @@
 # ユーザ検索プログラム
 # usersテーブルからキーボードで入力したユーザ名を条件にレコードを取得して表示
 
-import os
-import sys
 import datetime
-import matplotlib.pyplot as plt
+import base64
 from io import BytesIO
 import mysql.connector
-import base64
+import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from util import db_util
-from util import input_util
-from db import access_weight_records
+from ..util import db_util
+from ..util import input_util
+from ..db import access_weight_records
 
 
 def execute():

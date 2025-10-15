@@ -1,15 +1,11 @@
 # 身長更新プログラム
 # キーボードで入力した情報をusersテーブルに更新する
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import mysql.connector
-from util import db_util
-from util import input_util
-from db import access_users
+
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
 
 
 def execute():

@@ -1,16 +1,12 @@
 # ユーザ削除プログラム
 # キーボードで入力した情報をusersテーブルから削除する
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import mysql.connector
-from util import db_util
-from util import input_util
-from db import access_users
-from db import access_weight_records
+
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
+from ..db import access_weight_records
 
 
 def execute():

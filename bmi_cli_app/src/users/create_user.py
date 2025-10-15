@@ -1,15 +1,11 @@
 # ユーザー登録プログラム
 # キーボードで入力した情報をusersテーブルに登録する
 
-import os
-import sys
 import mysql.connector
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from util import db_util
-from util import input_util
-from db import access_users
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
 
 
 def execute():
