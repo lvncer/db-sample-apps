@@ -1,18 +1,13 @@
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from exam import select_all_exam
-from exam import find_by_id_exam
-from exam import create_exam
-from exam import update_exam
-from exam import delete_exam
-from util import inpututil
+from . import select_all_student
+from . import find_by_id_student
+from . import create_student2
+from . import update_student
+from . import delete_student
+from ..util import inpututil
 
 
 def execute():
-    print("*** 成績管理 ***")
+    print("*** 学生管理 ***")
     print_menu()
 
     while True:
@@ -21,15 +16,15 @@ def execute():
 
         # 番号によってモジュールの関数を実行
         if no == 1:
-            select_all_exam.execute()
+            select_all_student.execute()
         elif no == 2:
-            find_by_id_exam.execute()
+            find_by_id_student.execute()
         elif no == 3:
-            create_exam.execute()
+            create_student2.execute()
         elif no == 4:
-            update_exam.execute()
+            update_student.execute()
         elif no == 5:
-            delete_exam.execute()
+            delete_student.execute()
         elif no == 6:
             print("操作を終了します")
             break
