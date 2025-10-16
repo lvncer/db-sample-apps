@@ -8,9 +8,19 @@ def create_student():
     birth_date = input("生年月日を入力してください: ")
     class_name = input("クラスを入力してください: ")
 
+    # 辞書に保存
+    student = {
+        "id": student_id,
+        "name": name,
+        "birth_date": birth_date,
+        "class": class_name,
+    }
+
     # 登録内容を表示
     print("\n-- 以下の内容を登録しました --")
-    print(f"ID: {student_id}, 名前:{name}, 生年月日: {birth_date} クラス: {class_name}")
+    print(
+        f"ID: {student['id']}, 名前:{student['name']}, 生年月日: {student['birth_date']} クラス: {student['class']}"
+    )
 
     return
 
