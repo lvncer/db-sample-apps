@@ -1,13 +1,8 @@
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import mysql.connector
-from util import dbutil
-from util import inpututil
-from db import dbaccess_student
-from db import dbaccess_exam
+from ..util import dbutil
+from ..util import inpututil
+from ..db import dbaccess_student
+from ..db import dbaccess_exam
 
 
 def execute():
@@ -25,7 +20,6 @@ def execute():
 
             # studentテーブルに該当するIDが存在しているかのチェック
             if len(rows_student) == 0:
-                # 存在してないので再入力させる
                 print(f"ID={id}は登録されていません")
                 print("再入力してください")
                 continue
@@ -43,10 +37,8 @@ def execute():
         # 削除対象の表示
         dbaccess_exam.pre_delete_showtable_exam(cursor, id, subject)
 
-        # 削除確認（Yを入力すると削除が確定される)
         result_confirm = dbutil.confirming("本当に削除してもよろしいでしょうか(Y/n)")
 
-        # Yが入力されたならば以下を実行する
         if result_confirm:
             sql = "DELETE FROM exam WHERE id = %s"
 

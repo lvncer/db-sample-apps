@@ -1,11 +1,6 @@
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from student import menu_student
-from exam import menu_exam
-from util import inpututil
+from .student import menu_student
+from .exam import menu_exam
+from .util import inpututil
 
 
 def execute():
