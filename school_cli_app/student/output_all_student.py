@@ -1,6 +1,3 @@
-# 学生出力プログラム
-# studentテーブルからすべてのレコードを取得してHTML形式で出力
-
 import os
 import sys
 
@@ -12,14 +9,9 @@ from db import dbaccess_student
 
 
 def execute():
-    # 1) 初期処理
-
-    # mysqlに接続
-
     try:
+        # mysqlに接続
         cnx = dbutil.connect()
-
-        # カーソルを作成
         cursor = cnx.cursor(dictionary=True)
 
         # データベースから学生情報を全件取得
@@ -31,8 +23,6 @@ def execute():
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
-
-    # 5) 終了処理
 
     finally:
         cursor.close()

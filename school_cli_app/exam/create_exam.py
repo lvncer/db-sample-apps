@@ -1,6 +1,3 @@
-# 学生成績登録プログラム
-# キーボードで入力した情報をexamテーブルに登録する
-
 import os
 import sys
 
@@ -14,16 +11,10 @@ from db import dbaccess_exam
 
 
 def execute():
-    # 1) 初期処理
-
-    # mysqlに接続
-    cnx = dbutil.connect()
-
     try:
-        # カーソルを作成
+        # mysqlに接続
+        cnx = dbutil.connect()
         cursor = cnx.cursor(dictionary=True)
-
-        # 2) キーボードから入力させる
 
         print("*** 学生登録 ***")
 
@@ -52,19 +43,10 @@ def execute():
 
         score = inpututil.input_int("成績を入力してください: ")
 
-        # 3) 登録sqlを作成
-
-        # あとから設定したい値には%sに置き換える
         sql = "INSERT INTO exam (id, subject, score) VALUES (%s, %s, %s)"
 
-        # 設定したい値はリストにする
         data = [id, subject, score]
-
-        # sqlを実行(SQLの文字列、値のリスト)
         cursor.execute(sql, data)
-
-        # 5) 結果を表示
-
         cnx.commit()
 
         print(f"ID={id} を登録しました")
@@ -72,8 +54,6 @@ def execute():
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
-
-    # 6) 終了処理
 
     finally:
         cursor.close()

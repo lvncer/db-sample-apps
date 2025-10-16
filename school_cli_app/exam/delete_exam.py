@@ -1,6 +1,3 @@
-# 学生成績削除プログラム
-# キーボードで入力した情報をexamテーブルから削除する
-
 import os
 import sys
 
@@ -14,16 +11,10 @@ from db import dbaccess_exam
 
 
 def execute():
-    # 1) 初期処理
-
-    # mysqlに接続
-    cnx = dbutil.connect()
-
     try:
-        # カーソルを作成
+        # mysqlに接続
+        cnx = dbutil.connect()
         cursor = cnx.cursor(dictionary=True)
-
-        # 2) キーボードから入力させる
 
         print("*** 学生削除 ***")
 
@@ -57,31 +48,20 @@ def execute():
 
         # Yが入力されたならば以下を実行する
         if result_confirm:
-            # 3) 削除sqlを作成
-            # あとから設定したい値には%sに置き換える
             sql = "DELETE FROM exam WHERE id = %s"
 
-            # 設定したい値はリストにする
             data = [id]
-
-            # sqlを実行(SQLの文字列、値のリスト)
             cursor.execute(sql, data)
-
-            # 5) 結果を表示
-
             cnx.commit()
 
             print(f"ID={id} を削除しました")
 
-        # nが入力されたならば以下を実行する
         else:
             print("削除をキャンセルしました")
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
-
-    # 6) 終了処理
 
     finally:
         cursor.close()

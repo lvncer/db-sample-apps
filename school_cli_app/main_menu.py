@@ -10,12 +10,9 @@ from util import inpututil
 
 def execute():
     print("*** 学生成績管理 ***")
-
-    # メニューの表示
     print_menu()
 
     while True:
-        # キーボードからメニュー番号を入力させる
         print("1~3までの整数を入力してください")
         no = inpututil.input_int("メニュー番号を入力してください : ")
 

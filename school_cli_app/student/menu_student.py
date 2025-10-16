@@ -1,6 +1,3 @@
-# 学生管理プログラム
-# キーボードで入力した情報でstudentテーブルを操作
-
 import os
 import sys
 
@@ -16,12 +13,9 @@ from util import inpututil
 
 def execute():
     print("*** 学生管理 ***")
-
-    # メニューの表示
     print_menu()
 
     while True:
-        # キーボードからメニュー番号を入力させる
         print("1~6までの整数を入力してください")
         no = inpututil.input_int("メニュー番号を入力してください : ")
 

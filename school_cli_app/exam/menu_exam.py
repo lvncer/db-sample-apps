@@ -1,6 +1,3 @@
-# 成績管理プログラム
-# キーボードで入力した情報でexamテーブルを操作
-
 import os
 import sys
 
@@ -11,18 +8,14 @@ from exam import find_by_id_exam
 from exam import create_exam
 from exam import update_exam
 from exam import delete_exam
-# from util import dbutil
 from util import inpututil
 
 
 def execute():
     print("*** 成績管理 ***")
-
-    # メニューの表示
     print_menu()
 
     while True:
-        # キーボードからメニュー番号を入力させる
         print("1~6までの整数を入力してください")
         no = inpututil.input_int("メニュー番号を入力してください : ")
 
