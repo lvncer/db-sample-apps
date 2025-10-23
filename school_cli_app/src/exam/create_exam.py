@@ -18,13 +18,13 @@ def execute():
 
             rows_student = dbaccess_student.find_by_id_student(cursor, id)
 
-            # studentテーブルに該当するIDが存在しているかのチェック
             if len(rows_student) == 0:
-                # 存在してないので再入力させる
                 print(f"ID={id}は登録されていません")
                 print("再入力してください")
                 continue
+            break
 
+        while True:
             subject = input("科目を入力してください: ")
 
             # 入力したIDがテーブルが存在するかチェック
@@ -42,13 +42,14 @@ def execute():
 
         data = [id, subject, score]
         cursor.execute(sql, data)
-        cnx.commit()
-
-        print(f"ID={id} を登録しました")
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
+
+    else:
+        cnx.commit()
+        print(f"ID={id} を登録しました")
 
     finally:
         cursor.close()
