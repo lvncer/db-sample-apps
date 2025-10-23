@@ -31,13 +31,14 @@ def execute():
 
         data = [id, name, birthday, clas]
         cursor.execute(sql, data)
-        cnx.commit()
-
-        print(f"ID={id} を登録しました")
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
+
+    else:
+        cnx.commit()
+        print(f"ID={id} を登録しました")
 
     finally:
         cursor.close()
