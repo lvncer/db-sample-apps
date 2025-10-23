@@ -3,7 +3,7 @@ def find_by_id_student(cursor, id):
 
     data = [id]
     cursor.execute(sql, data)
-    rows = cursor.fetchall()
+    rows = cursor.fetchone()
 
     return rows
 
