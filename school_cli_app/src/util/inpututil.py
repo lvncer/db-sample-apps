@@ -2,7 +2,7 @@ import datetime
 
 
 # キーボードの入力内容を整数で返します
-def input_int(prompt):
+def input_int(prompt: str) -> int:
     while True:
         str = input(prompt)
 
@@ -17,7 +17,7 @@ def input_int(prompt):
 
 
 # キーボードの入力内容を日付で返します
-def input_date(prompt):
+def input_date(prompt: str) -> str:
     while True:
         str = input(prompt)
 
@@ -32,7 +32,7 @@ def input_date(prompt):
     return str
 
 
-def input_replace(prompt):
+def input_replace(prompt: str) -> str:
     str = input(prompt).strip()
 
     return str
