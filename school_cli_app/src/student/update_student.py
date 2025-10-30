@@ -30,9 +30,11 @@ def execute():
         result_confirm = dbutil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
-            sql = (
-                "UPDATE student SET name = %s, birthday = %s, class = %s WHERE id = %s"
-            )
+            sql = """
+                UPDATE student
+                SET name = %s, birthday = %s, class = %s
+                WHERE id = %s
+                """
 
             data = [name, birthday, clas, id]
             cursor.execute(sql, data)

@@ -33,14 +33,30 @@ def execute():
 
             print(f"subject={subject}は存在していません")
 
+        # 入力されたIDと科目の組み合わせが既に存在しているかをチェック
+        while True:
+            change_subject = input("変更後の名を入力してください。")
+            rows_exam = dbaccess_exam.update_score(cursor, id, change_subject)
+            if len(rows_exam) != 0 and change_subject != subject:
+                print(
+                    f"ID={id} と科目={change_subject}の組み合わせは既に存在しています"
+                )
+                print("再入力してください")
+                continue
+            break
+
         score = inpututil.input_int("成績を入力してください: ")
 
         result_confirm = dbutil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
-            sql = "UPDATE exam SET score = %s WHERE id = %s AND subject = %s"
+            sql = """
+            UPDATE exam
+            SET subject = %s, score = %s
+            WHERE id = %s AND subject = %s
+            """
 
-            data = [score, id, subject]
+            data = [change_subject, score, id, subject]
             cursor.execute(sql, data)
             cnx.commit()
 
