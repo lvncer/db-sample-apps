@@ -16,15 +16,19 @@ def execute():
             id = inpututil.input_int("IDを入力してください: ")
 
             # 入力したIDがテーブルが存在するかチェック
-            rows = dbaccess_student.find_by_id_student(cursor, id)
-
-            if len(rows) != 0:
-                break  # 入力したIDは存在しています
+            student = dbaccess_student.find_by_id_student(cursor, id)
+            if student:
+                break
 
             print(f"ID={id}は存在していません")
 
         # 削除対象の表示
-        dbaccess_student.pre_delete_showtable_school(cursor, id)
+        student = dbaccess_student.find_by_id_student(cursor, id)
+        if student:
+            print(f"ID={student['id']} : ", end=" ")
+            print(f"name={student['name']} : ", end=" ")
+            print(f"birthday={student['birthday']} :", end=" ")
+            print(f"class={student['class']}")
 
         result_confirm = inpututil.confirming("本当に削除してもよろしいでしょうか(Y/n)")
 
@@ -36,7 +40,6 @@ def execute():
             cnx.commit()
 
             print(f"ID={id} を削除しました")
-
         else:
             print("削除をキャンセルしました")
 

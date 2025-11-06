@@ -16,10 +16,9 @@ def execute():
             id = inpututil.input_int("IDを入力してください: ")
 
             # 入力したIDがテーブルが存在するかチェック
-            rows = dbaccess_student.find_by_id_student(cursor, id)
-
-            if len(rows) == 0:
-                break  # 入力したIDは存在しない
+            student = dbaccess_student.find_by_id_student(cursor, id)
+            if not student:
+                break
 
             print(f"ID={id}はすでに存在しています")
 
