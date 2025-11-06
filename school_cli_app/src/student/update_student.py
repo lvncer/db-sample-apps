@@ -2,6 +2,7 @@ import mysql.connector
 from ..util import dbutil
 from ..util import inpututil
 from ..db import dbaccess_student
+from ..db import student
 
 
 def execute():
@@ -16,8 +17,8 @@ def execute():
             id = inpututil.input_int("IDを入力してください: ")
 
             # 入力したIDがテーブルが存在するかチェック
-            student = dbaccess_student.find_by_id_student(cursor, id)
-            if student:
+            existing_student = dbaccess_student.find_by_id_student(cursor, id)
+            if existing_student:
                 break
 
             print(f"ID={id}は存在していません")
@@ -29,14 +30,8 @@ def execute():
         result_confirm = inpututil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
-            sql = """
-                UPDATE student
-                SET name = %s, birthday = %s, class = %s
-                WHERE id = %s
-                """
-
-            data = [name, birthday, clas, id]
-            cursor.execute(sql, data)
+            student_obj = student.Student(id=id, name=name, birthday=birthday, clazz=clas)
+            dbaccess_student.update_student(cursor, student_obj)
             cnx.commit()
 
             print(f"ID={id} を更新しました")

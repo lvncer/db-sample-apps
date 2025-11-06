@@ -25,20 +25,15 @@ def execute():
         # 削除対象の表示
         student = dbaccess_student.find_by_id_student(cursor, id)
         if student:
-            print(f"ID={student['id']} : ", end=" ")
-            print(f"name={student['name']} : ", end=" ")
-            print(f"birthday={student['birthday']} :", end=" ")
-            print(f"class={student['class']}")
+            print(f"ID={student.id} : ", end=" ")
+            print(f"name={student.name} : ", end=" ")
+            print(f"birthday={student.birthday} :", end=" ")
+            print(f"class={student.clazz}")
 
         result_confirm = inpututil.confirming("本当に削除してもよろしいでしょうか(Y/n)")
-
         if result_confirm:
-            sql = "DELETE FROM student WHERE id = %s"
-
-            data = [id]
-            cursor.execute(sql, data)
+            dbaccess_student.delete_student(cursor, id)
             cnx.commit()
-
             print(f"ID={id} を削除しました")
         else:
             print("削除をキャンセルしました")

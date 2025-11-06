@@ -33,6 +33,28 @@ def select_all(cursor) -> list[Student]:
 
 
 def insert_student(cursor, student: Student) -> None:
-    sql = "INSERT INTO student (id, name, birthday, class) VALUES (%s, %s, %s, %s)"
+    sql = """
+    INSERT INTO student (id, name, birthday, class)
+    VALUES (%s, %s, %s, %s)
+    """
+
     data = [student.id, student.name, student.birthday, student.clazz]
+    cursor.execute(sql, data)
+
+
+def update_student(cursor, student: Student) -> None:
+    sql = """
+    UPDATE student
+    SET name = %s, birthday = %s, class = %s
+    WHERE id = %s
+    """
+
+    data = [student.name, student.birthday, student.clazz, student.id]
+    cursor.execute(sql, data)
+
+
+def delete_student(cursor, id) -> None:
+    sql = "DELETE FROM student WHERE id = %s"
+
+    data = [id]
     cursor.execute(sql, data)
