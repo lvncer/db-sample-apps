@@ -27,7 +27,7 @@ def execute():
         birthday = inpututil.input_date("生年月日を入力してください: ")
         clas = inpututil.input_replace("クラスを入力してください: ")
 
-        result_confirm = dbutil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
+        result_confirm = inpututil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
             sql = """

@@ -36,3 +36,16 @@ def input_replace(prompt: str) -> str:
     str = input(prompt).strip()
 
     return str
+
+
+def confirming(prompt: str) -> bool:
+    while True:
+        message = input(prompt).strip().lower()
+
+        if message == "y":
+            return True
+        elif message == "n":
+            return False
+        else:
+            print("入力された値は指定されていません")
+            print("Yかnで入力してください")

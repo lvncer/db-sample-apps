@@ -26,7 +26,7 @@ def execute():
         # 削除対象の表示
         dbaccess_student.pre_delete_showtable_school(cursor, id)
 
-        result_confirm = dbutil.confirming("本当に削除してもよろしいでしょうか(Y/n)")
+        result_confirm = inpututil.confirming("本当に削除してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
             sql = "DELETE FROM student WHERE id = %s"

@@ -47,7 +47,7 @@ def execute():
 
         score = inpututil.input_int("成績を入力してください: ")
 
-        result_confirm = dbutil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
+        result_confirm = inpututil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
             sql = """
