@@ -14,11 +14,12 @@ def execute():
 
         id = inpututil.input_int("IDを入力してください")
 
-        rows = dbaccess_student.find_by_id_student(cursor, id)
+        student = dbaccess_student.find_by_id_student(cursor, id)
 
-        if len(rows) != 0:
-            for row in rows:
-                print(f"{row['id']} : {row['name']}")
+        if student:
+            print(
+                f"ID:{student.id}, name:{student.name}, birthday:{student.birthday}, class:{student.clazz}"
+            )
         else:
             print(f"ID={id}は見つかりません")
 

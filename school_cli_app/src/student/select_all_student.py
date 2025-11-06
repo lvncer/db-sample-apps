@@ -1,5 +1,6 @@
 import mysql.connector
 from ..util import dbutil
+from ..db import dbaccess_student
 
 
 def execute():
@@ -8,13 +9,10 @@ def execute():
         cnx = dbutil.connect()
         cursor = cnx.cursor(dictionary=True)
 
-        sql = "SELECT * FROM student ORDER BY id"
+        students = dbaccess_student.select_all(cursor)
 
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-
-        for row in rows:
-            print(f"{row['id']} : {row['name']}")
+        for student in students:
+            print(f"{student.id} : {student.name} : {student.birthday} : {student.clazz}")
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
