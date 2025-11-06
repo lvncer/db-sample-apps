@@ -19,7 +19,6 @@ def execute():
             student = dbaccess_student.find_by_id_student(cursor, id)
             if student:
                 break
-
             print(f"ID={id}は存在していません")
 
         # 削除対象の表示

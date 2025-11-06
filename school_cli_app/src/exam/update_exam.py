@@ -3,6 +3,7 @@ from ..util import dbutil
 from ..util import inpututil
 from ..db import dbaccess_student
 from ..db import dbaccess_exam
+from ..db import exam
 
 
 def execute():
@@ -17,29 +18,26 @@ def execute():
             id = inpututil.input_int("IDを入力してください: ")
 
             rows_student = dbaccess_student.find_by_id_student(cursor, id)
+            if rows_student:
+                break
+            print(f"ID={id}は登録されていません")
+            print("再入力してください")
 
-            # studentテーブルに該当するIDが存在しているかのチェック
-            if len(rows_student) == 0:
-                print(f"ID={id}は登録されていません")
-                print("再入力してください")
-                continue
-
+        while True:
             subject = input("科目を入力してください: ")
 
-            rows = dbaccess_exam.update_score(cursor, id, subject)
-
-            if len(rows) != 0:
-                break  # 入力したsubjectは存在する
-
+            rows_exam = dbaccess_exam.find_by_id_and_subject(cursor, id, subject)
+            if rows_exam:
+                break
             print(f"subject={subject}は存在していません")
 
-        # 入力されたIDと科目の組み合わせが既に存在しているかをチェック
         while True:
-            change_subject = input("変更後の名を入力してください。")
-            rows_exam = dbaccess_exam.update_score(cursor, id, change_subject)
-            if len(rows_exam) != 0 and change_subject != subject:
+            change_subject = input("変更後の科目名を入力してください。")
+
+            rows_exam = dbaccess_exam.find_by_id_and_subject(cursor, id, change_subject)
+            if rows_exam and change_subject != subject:
                 print(
-                    f"ID={id} と科目={change_subject}の組み合わせは既に存在しています"
+                    f"ID: {id} と科目=: {change_subject} の組み合わせは既に存在しています"
                 )
                 print("再入力してください")
                 continue
@@ -50,24 +48,18 @@ def execute():
         result_confirm = inpututil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
-            sql = """
-            UPDATE exam
-            SET subject = %s, score = %s
-            WHERE id = %s AND subject = %s
-            """
-
-            data = [change_subject, score, id, subject]
-            cursor.execute(sql, data)
-            cnx.commit()
-
-            print(f"ID={id} を更新しました")
-
+            exam_obj = exam.Exam(id=id, subject=change_subject, score=score)
+            dbaccess_exam.update_exam(cursor, exam_obj)
         else:
             print("更新をキャンセルしました")
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
+
+    else:
+        cnx.commit()
+        print(f"ID={id} を更新しました")
 
     finally:
         cursor.close()
