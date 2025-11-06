@@ -30,18 +30,20 @@ def execute():
         result_confirm = inpututil.confirming("本当に更新してもよろしいでしょうか(Y/n)")
 
         if result_confirm:
-            student_obj = student.Student(id=id, name=name, birthday=birthday, clazz=clas)
+            student_obj = student.Student(
+                id=id, name=name, birthday=birthday, clazz=clas
+            )
             dbaccess_student.update_student(cursor, student_obj)
-            cnx.commit()
-
-            print(f"ID={id} を更新しました")
-
         else:
             print("更新をキャンセルしました")
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
+
+    else:
+        cnx.commit()
+        print(f"ID: {id} を更新しました")
 
     finally:
         cursor.close()
