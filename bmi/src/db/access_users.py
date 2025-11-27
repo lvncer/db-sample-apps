@@ -1,5 +1,7 @@
-# 入力したユーザ名がusersテーブルに存在しているか確認
-def find_by_name_user(cursor, name):
+from .user import User
+
+
+def find_by_name_user(cursor, name) -> User | None:
     sql = """
         SELECT * FROM users WHERE name = %s
         ORDER BY id DESC;
@@ -7,24 +9,21 @@ def find_by_name_user(cursor, name):
 
     data = [name]
     cursor.execute(sql, data)
-    rows = cursor.fetchall()
+    rows = cursor.fetchone()
 
     return rows
 
 
-# usersテーブルにユーザを追加する
-def create_user(cursor, name, birthday, height, target_weight):
+def create_user(cursor, user: User) -> None:
     sql = """
-            INSERT INTO users
-            (name, birthday, height, target_weight)
-            VALUES (%s, %s, %s, %s);
-        """
+        INSERT INTO users (name, birthday, height, target_weight)
+        VALUES (%s, %s, %s, %s);
+    """
 
-    data = [name, birthday, height, target_weight]
+    data = [user.name, user.birthday, user.height, user.target_weight]
     cursor.execute(sql, data)
 
 
-# 身長を更新する
 def update_height(cursor, height, name):
     sql = """
         UPDATE users SET height = %s
@@ -35,7 +34,6 @@ def update_height(cursor, height, name):
     cursor.execute(sql, data)
 
 
-# 目標体重を更新する
 def update_target_weight(cursor, target_weight, name):
     sql = """
         UPDATE users SET target_weight = %s
@@ -46,7 +44,6 @@ def update_target_weight(cursor, target_weight, name):
     cursor.execute(sql, data)
 
 
-# usersテーブルから指定されたユーザを削除する
 def delete_user(cursor, name):
     sql = """
         DELETE FROM users WHERE name = %s;
