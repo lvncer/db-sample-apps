@@ -1,17 +1,9 @@
-# TODO出力プログラム
-# 指定されたユーザのTODOを表示する
-
-import os
-import sys
 import mysql.connector
 import datetime
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from util import db_util
-from util import input_util
-from db import access_users
-from db import access_todo_records
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
+from ..db import access_todo_records
 
 
 def execute():

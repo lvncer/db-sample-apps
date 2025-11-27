@@ -3,5 +3,5 @@
 ## Execute
 
 ```bash
-python -m src.main
+uv run python -m src.main
 ```

@@ -1,17 +1,10 @@
-# クエスト
-# 指定されたユーザの敵と戦う
-
-from db import access_enemy
-from db import access_level
-from db import access_users
-from util import input_util
-from util import db_util
-import os
-import sys
+from ..db import access_enemy
+from ..db import access_level
+from ..db import access_users
+from ..util import input_util
+from ..util import db_util
 import mysql.connector
 import random
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # 主人公攻撃時にフラグを処理して敵のHPを減少させる

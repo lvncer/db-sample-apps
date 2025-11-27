@@ -6,10 +6,10 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from users import u5_menu_user
-from todo_records import t7_menu_todo_records
-import quest
-from util import input_util
+from .users import menu_user
+from .todo_records import menu_todo_records
+from .quests import menu_quest
+from .util import input_util
 
 
 def execute():
@@ -28,11 +28,11 @@ def execute():
 
         # 番号によってモジュールの関数を実行
         if no == 1:
-            u5_menu_user.execute()
+            menu_user.execute()
         elif no == 2:
-            t7_menu_todo_records.execute()
+            menu_todo_records.execute()
         elif no == 3:
-            quest.execute()
+            menu_quest.execute()
         elif no == 4:
             print()
             print("終了します")

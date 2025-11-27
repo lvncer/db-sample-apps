@@ -1,17 +1,9 @@
-# TODO表示プログラム
-# 入力されたユーザ名を条件にtodo_recordsテーブルからレコードを取得して表示
-
-import os
-import sys
 import mysql.connector
 import datetime
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from util import db_util
-from util import input_util
-from db import access_users
-from db import access_todo_records
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
+from ..db import access_todo_records
 
 
 def execute():
@@ -42,10 +34,10 @@ def execute():
 
 def show_todo_record(user_rows, cursor):
     if len(user_rows) != 0:
-        print('並び順')
-        print('1: 優先度高い順')
-        print('2: 期限短い順')
-        print('を入力してください: ', end='')
+        print("並び順")
+        print("1: 優先度高い順")
+        print("2: 期限短い順")
+        print("を入力してください: ", end="")
 
         sort_prompt = input_util.input_sort_order()
 
@@ -57,17 +49,17 @@ def show_todo_record(user_rows, cursor):
         )
 
         if len(todo_rows) != 0:
-            print('-- TODO(最大5件) --')
+            print("-- TODO(最大5件) --")
 
             for row in todo_rows:
-                id = row['id']
-                title = row['title']
-                deadline = row['deadline']
-                priority = row['priority']
+                id = row["id"]
+                title = row["title"]
+                deadline = row["deadline"]
+                priority = row["priority"]
 
                 # deadlineが9999/12/31なら空文字にする
                 if deadline == datetime.date(9999, 12, 31):
-                    deadline = ''
+                    deadline = ""
 
                 # priorityを数値から文字に変換する
                 priority = db_util.change_priority(priority)

@@ -1,17 +1,8 @@
-# ユーザ削除プログラム
-# 入力されたユーザをusersテーブルから削除する
-# todo_recordsにあるTODO記録も削除する
-
-import os
-import sys
 import mysql.connector
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from util import db_util
-from util import input_util
-from db import access_users
-from db import access_todo_records
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
+from ..db import access_todo_records
 
 
 def execute():
@@ -53,9 +44,7 @@ def delete_user(user_rows, cursor, name, cnx):
             print()
 
         # 該当するユーザ名のTODO記録を取得する
-        record_rows = access_todo_records.find_by_user_id(
-            cursor, user_rows[0]['id']
-        )
+        record_rows = access_todo_records.find_by_user_id(cursor, user_rows[0]["id"])
 
         # TODO記録の件数を表示する
         print(f"TODO: {len(record_rows)}件")
@@ -70,7 +59,7 @@ def delete_user(user_rows, cursor, name, cnx):
         if result_confirm:
 
             access_todo_records.delete_by_user_id_todo_records(
-                cursor, user_rows[0]['id']
+                cursor, user_rows[0]["id"]
             )
 
             # 指定された名前のユーザをusersテーブルから削除する
@@ -79,7 +68,7 @@ def delete_user(user_rows, cursor, name, cnx):
             cnx.commit()
 
             print()
-            print('削除しました')
+            print("削除しました")
 
         else:
             print()

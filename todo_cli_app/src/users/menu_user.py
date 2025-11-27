@@ -1,16 +1,8 @@
-# ユーザ管理プログラム
-# 入力されたメニュー選択番号でusersのモジュールを呼び出す
-
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from users import u1_create_user
-from users import u2_show_user
-from users import u3_update_user
-from users import u4_delete_user
-from util import input_util
+from . import create_user
+from . import show_user
+from . import update_user
+from . import delete_user
+from ..util import input_util
 
 
 def execute():
@@ -25,13 +17,13 @@ def execute():
 
         # 番号によってモジュールの関数を実行
         if no == 1:
-            u1_create_user.execute()
+            create_user.execute()
         elif no == 2:
-            u2_show_user.execute()
+            show_user.execute()
         elif no == 3:
-            u3_update_user.execute()
+            update_user.execute()
         elif no == 4:
-            u4_delete_user.execute()
+            delete_user.execute()
         elif no == 5:
             break
         else:

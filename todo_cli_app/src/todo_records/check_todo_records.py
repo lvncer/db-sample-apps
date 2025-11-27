@@ -1,18 +1,10 @@
-# TODO完了確認プログラム
-# 入力されたユーザ名のTODO記録の完了を確認し削除する
-# 完了報告したTODOの優先度に応じて経験値を取得し登録する
-
-import os
-import sys
 import mysql.connector
 import datetime
+from ..util import db_util
+from ..util import input_util
+from ..db import access_users
+from ..db import access_todo_records
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from util import db_util
-from util import input_util
-from db import access_users
-from db import access_todo_records
 
 
 def execute():
