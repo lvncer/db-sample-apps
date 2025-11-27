@@ -1,17 +1,25 @@
 from .user import User
 
 
-def find_by_name_user(cursor, name) -> User | None:
+def find_by_name(cursor, name) -> User | None:
     sql = """
-        SELECT * FROM users WHERE name = %s
-        ORDER BY id DESC;
+        SELECT * FROM users
+        WHERE name = %s;
     """
 
     data = [name]
     cursor.execute(sql, data)
-    rows = cursor.fetchone()
+    row = cursor.fetchone()
 
-    return rows
+    if row:
+        return User(
+            id=row["id"],
+            name=row["name"],
+            birthday=row["birthday"],
+            height=row["height"],
+            target_weight=row["target_weight"],
+        )
+    return None
 
 
 def create_user(cursor, user: User) -> None:
@@ -44,55 +52,10 @@ def update_target_weight(cursor, target_weight, name):
     cursor.execute(sql, data)
 
 
-def delete_user(cursor, name):
+def delete_user(cursor, id):
     sql = """
-        DELETE FROM users WHERE name = %s;
+        DELETE FROM users WHERE id = %s;
     """
 
-    data = [name]
+    data = [id]
     cursor.execute(sql, data)
-
-
-# 削除する前に該当する行を表示する
-def find_delete_id(cursor, name, id):
-    sql = """
-        SELECT weight_records.id AS id
-        FROM weight_records LEFT OUTER JOIN users
-        ON weight_records.user_id = users.id
-        WHERE name = %s AND weight_records.id = %s;
-    """
-
-    data = [name, id]
-    cursor.execute(sql, data)
-    rows = cursor.fetchall()
-
-    return rows
-
-
-# delete_userで削除するユーザのweight_recordsに記録されている体重の件数を返す
-def find_weight_records(cursor, name):
-    sql = """
-        SELECT weight_records.id AS id
-        FROM weight_records LEFT OUTER JOIN users
-        ON weight_records.user_id = users.id
-        WHERE name = %s;
-    """
-
-    data = [name]
-    cursor.execute(sql, data)
-    rows = cursor.fetchall()
-
-    return rows
-
-
-# ユーザ名からidを取得する
-def find_id_by_name(cursor, name):
-    sql = """
-        SELECT id FROM users WHERE name = %s;
-    """
-
-    data = [name]
-    cursor.execute(sql, data)
-    rows = cursor.fetchall()
-
-    return rows[0]["id"]

@@ -13,23 +13,20 @@ def execute():
     while True:
         no = input_util.input_int("メニューを選択してください : ")
 
-        # 番号によってモジュールの関数を実行
-        if no == 1:
-            create_user.execute()
-        elif no == 2:
-            find_by_name_users.execute()
-        elif no == 3:
-            update_height.execute()
-        elif no == 4:
-            update_target_weight.execute()
-        elif no == 5:
-            delete_user.execute()
-        elif no == 6:
-            print("操作を終了します")
-            break
-        else:
-            print("無効な値です")
-            print_menu()
+        match no:
+            case 1:
+                create_user.execute()
+            case 2:
+                find_by_name_users.execute()
+            case 3:
+                update_height.execute()
+            case 4:
+                update_target_weight.execute()
+            case 5:
+                delete_user.execute()
+            case _:
+                print("操作を終了します")
+                break
 
 
 def print_menu():

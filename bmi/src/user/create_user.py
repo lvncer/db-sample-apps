@@ -14,7 +14,7 @@ def execute():
 
         name = input_util.input_replace("ユーザ名を入力してください: ")
 
-        is_input_user_exists = access_users.find_by_name_user(cursor, name)
+        is_input_user_exists = access_users.find_by_name(cursor, name)
 
         if not is_input_user_exists:
             birthday = input_util.input_date("生年月日を入力してください [%Y-%m-%d] : ")

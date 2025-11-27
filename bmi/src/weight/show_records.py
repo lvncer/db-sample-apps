@@ -9,7 +9,6 @@ from ..db import access_weight_records
 
 def execute():
     try:
-        # mysqlに接続
         cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
@@ -17,38 +16,24 @@ def execute():
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        # userテーブルに存在するかを確認
-        rows = access_users.find_by_name_user(cursor, name)
+        user_obj = access_users.find_by_name(cursor, name)
+        if user_obj:
+            user_id = user_obj.id
+            birthday = user_obj.birthday
+            weight_records = access_weight_records.find_by_user_id(cursor, user_id)
+            if weight_records:
+                for weight_record in weight_records:
+                    id = weight_record.id
+                    height_cm = weight_record.height
+                    weight_kg = weight_record.weight
+                    target_weight = weight_record.target_weight
+                    record_date = weight_record.record_date
 
-        if len(rows) != 0:
-            rows = access_weight_records.find_by_name_weight_records(cursor, name)
-
-            if len(rows) != 0:
-                for row in rows:
-                    id = row["id"]
-                    height_cm = float(row["height"])
-                    weight_kg = float(row["weight"])
-                    target_weight = float(row["target_weight"])
-                    record_date = row["record_date"]
-                    birthday = row["birthday"]
-
-                    # 身長をセンチからメートル単位に変更する
                     height_m = height_cm / 100
+                    bmi = round(weight_kg / (height_m**2), 1)
+                    standard_weight = round(height_m**2 * 22, 1)
 
-                    # BMI計算
-                    bmi = weight_kg / (height_m**2.0)
-                    # 小数点以下第1桁まで表示する
-                    bmi = round(bmi, 1)
-
-                    # 標準体重計算
-                    standard_weight = height_m**2 * 22
-                    # 小数点以下第1桁まで表示する
-                    standard_weight = round(standard_weight, 1)
-
-                    # 現在時刻の取得[%Y-%m-%d %H:%M:%S]
                     d_today = datetime.datetime.now()
-
-                    # 年齢を計算する
                     age = (
                         d_today.year
                         - birthday.year
@@ -58,18 +43,14 @@ def execute():
                         )
                     )
 
-                    # BMIによる肥満度の判定
                     fat_level = calc_util.calc_fat_level(bmi, age)
-
-                    # 残りの平均体重への体重の差
                     remain_standard = calc_util.calc_remain_standard(
                         weight_kg, standard_weight
                     )
+                    remain_target = calc_util.calc_remain_target(
+                        weight_kg, target_weight
+                    )
 
-                    # 残りの目標体重への体重の差
-                    remain_target = calc_util.calc_remain_target(weight_kg, target_weight)
-
-                    # 結果を表示
                     print()
                     print(f"id: {id}")
                     print(f"日付: {record_date}")
@@ -81,9 +62,8 @@ def execute():
                     print(f"目標体重: {target_weight} (あと{remain_target}kg)")
                     print()
 
-                print(f"{len(rows)}件表示しました")
+                print(f"{len(weight_records)}件表示しました")
                 print()
-
             else:
                 print("[Error] そのユーザの体重は記録されていません")
                 print()

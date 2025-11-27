@@ -1,3 +1,6 @@
+import datetime
+
+
 # BMIによる肥満度の判定
 def calc_fat_level(bmi, age):
     fat_level = ""
@@ -58,3 +61,13 @@ def calc_remain_target(weight_kg, target_weight):
     remain_target = abs(remain_target)
 
     return remain_target
+
+
+def calc_age(birthday):
+    d_today = datetime.datetime.now()
+    age = (
+        d_today.year
+        - birthday.year
+        - ((d_today.month, d_today.day) < (birthday.month, birthday.day))
+    )
+    return age

@@ -6,7 +6,6 @@ from ..db import access_users
 
 def execute():
     try:
-        # mysqlに接続
         cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
@@ -14,26 +13,21 @@ def execute():
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        # 入力したユーザ名がテーブルが存在するかチェック
-        rows = access_users.find_by_name_user(cursor, name)
-
-        if len(rows) != 0:
+        is_input_user_exists = access_users.find_by_name(cursor, name)
+        if is_input_user_exists:
             target_weight = input_util.input_replace(
                 "目標体重を入力してください(kg) : "
             )
 
-            result_confirm = input_util.confirming(
+            is_update_confirm = input_util.confirming(
                 "本当に更新してもよろしいでしょうか(Y/n)"
             )
-
-            if result_confirm:
+            if is_update_confirm:
                 access_users.update_target_weight(cursor, target_weight, name)
-
                 cnx.commit()
 
                 print("目標体重を更新しました")
                 print()
-
             else:
                 print("更新をキャンセルしました")
                 print()

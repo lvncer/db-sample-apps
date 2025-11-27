@@ -12,19 +12,19 @@ def execute():
     while True:
         no = input_util.input_int("メニューを選択してください : ")
 
-        # 番号によってモジュールの関数を実行
-        if no == 1:
-            record_weight.execute()
-        elif no == 2:
-            show_records.execute()
-        elif no == 3:
-            delete_record.execute()
-        elif no == 4:
-            output_records.execute()
-        else:
-            print("操作を終了します")
-            print()
-            break
+        match no:
+            case 1:
+                record_weight.execute()
+            case 2:
+                show_records.execute()
+            case 3:
+                delete_record.execute()
+            case 4:
+                output_records.execute()
+            case _:
+                print("操作を終了します")
+                print()
+                break
 
 
 def print_menu():

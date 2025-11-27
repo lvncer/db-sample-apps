@@ -7,7 +7,6 @@ from ..db import access_weight_records
 
 def execute():
     try:
-        # mysqlに接続
         cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
@@ -15,43 +14,35 @@ def execute():
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        # 入力したIDがテーブルが存在するかチェック
-        rows = access_users.find_by_name_user(cursor, name)
+        deleting_user_obj = access_users.find_by_name(cursor, name)
 
-        if len(rows) != 0:
+        if deleting_user_obj:
             # 削除対象の表示
-            for row in rows:
-                print()
-                print(f"ユーザ名: {row['name']}")
-                print(f"生年月日: {row['birthday']}")
-                print(f"身長: {row['height']} cm")
-                print(f"目標体重: {row['target_weight']} kg")
-                print()
+            print()
+            print(f"ユーザ名: {deleting_user_obj.name}")
+            print(f"生年月日: {deleting_user_obj.birthday}")
+            print(f"身長　　: {deleting_user_obj.height} cm")
+            print(f"目標体重: {deleting_user_obj.target_weight} kg")
+            print()
 
-            # 該当するユーザ名の体重記録を取得する
-            record_rows = access_users.find_weight_records(cursor, name)
+            record_rows = access_weight_records.find_by_user_id(cursor, deleting_user_obj.id)
 
             print(f"体重記録: {len(record_rows)}件")
             print()
 
-            result_confirm = input_util.confirming(
+            is_delete_confirm = input_util.confirming(
                 "このデータをすべて削除してもよろしいですか？(y/n): "
             )
 
-            if result_confirm:
-                # 削除するユーザ名からweight_recordsテーブルのidを取得する
-                delete_id = access_users.find_id_by_name(cursor, name)
+            if is_delete_confirm:
+                deleting_id = access_users.find_by_name(cursor, name).id
 
-                # weight_recordsテーブルから指定されたユーザの体重記録を削除する
-                access_weight_records.delete_records(cursor, delete_id)
-
-                # 指定された名前のユーザをusersテーブルから削除する
-                access_users.delete_user(cursor, name)
+                access_weight_records.delete_records(cursor, deleting_id)
+                access_users.delete_user(cursor, deleting_id)
                 cnx.commit()
 
                 print("削除しました")
                 print()
-
             else:
                 print("削除をキャンセルしました")
                 print()

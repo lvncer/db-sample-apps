@@ -1,25 +1,54 @@
-# 指定された名前で結合したテーブルから必要な属性を取得する
-def find_by_name_weight_records(cursor, name):
+from ..db import weight_record
+from typing import List
+
+
+def find_by_id(cursor, id) -> weight_record.WeightRecord | None:
     sql = """
-        SELECT
-            weight_records.id AS id,
-            record_date, weight_records.height,
-            weight_records.weight,
-            weight_records.target_weight AS target_weight,
-            birthday
-        FROM weight_records LEFT OUTER JOIN users
-        ON weight_records.user_id = users.id
-        WHERE name = %s;
+        SELECT * FROM weight_records WHERE id = %s;
     """
 
-    data = [name]
+    weight_record_obj = None
+
+    data = [id]
+    cursor.execute(sql, data)
+    row = cursor.fetchone()
+    if row:
+        weight_record_obj = weight_record.WeightRecord(
+            id=row["id"],
+            user_id=row["user_id"],
+            record_date=row["record_date"],
+            height=row["height"],
+            weight=row["weight"],
+            target_weight=row["target_weight"],
+        )
+    return weight_record_obj
+
+
+def find_by_user_id(cursor, user_id) -> List[weight_record.WeightRecord]:
+    sql = """
+        SELECT * FROM weight_records WHERE user_id = %s;
+    """
+
+    weight_record_list = []
+
+    data = [user_id]
     cursor.execute(sql, data)
     rows = cursor.fetchall()
+    if rows:
+        for row in rows:
+            weight_record_list.append(
+                weight_record.WeightRecord(
+                    id=row["id"],
+                    user_id=row["user_id"],
+                    record_date=row["record_date"],
+                    height=row["height"],
+                    weight=row["weight"],
+                    target_weight=row["target_weight"],
+                )
+            )
+    return weight_record_list
 
-    return rows
 
-
-# weight_recordsに登録する
 def insert_weight_records(
     cursor, user_id, d_today, height_cm, weight_kg, target_weight
 ):
@@ -31,28 +60,6 @@ def insert_weight_records(
 
     data = [user_id, d_today, height_cm, weight_kg, target_weight]
     cursor.execute(sql, data)
-
-
-# 削除する前に該当する行を表示する
-def preshow_delete_records(cursor, id, name):
-    sql = """
-        SELECT
-            weight_records.id AS id,
-            record_date,
-            weight_records.height,
-            weight_records.weight,
-            weight_records.target_weight,
-            birthday
-        FROM weight_records LEFT OUTER JOIN  users
-        ON weight_records.user_id = users.id
-        WHERE weight_records.id = %s AND name = %s;
-    """
-
-    data = [id, name]
-    cursor.execute(sql, data)
-    rows = cursor.fetchall()
-
-    return rows
 
 
 # 入力されたユーザーidで削除を確定する
