@@ -10,16 +10,16 @@ def execute():
     while True:
         no = input_util.input_int("メニューを選択してください : ")
 
-        # 番号によってモジュールの関数を実行
-        if no == 1:
-            menu_users.execute()
-        elif no == 2:
-            menu_records.execute()
-        elif no == 3:
-            print("終了します")
-            break
-        else:
-            print("無効な値です")
+        match no:
+            case 1:
+                menu_users.execute()
+            case 2:
+                menu_records.execute()
+            case 3:
+                print("終了します")
+                break
+            case _:
+                print("無効な値です")
 
 
 def print_menu():
