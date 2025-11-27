@@ -1,8 +1,8 @@
 import datetime
 import mysql.connector
-
 from ..util import db_util
 from ..util import input_util
+from ..util import calc_util
 from ..db import access_users
 from ..db import access_weight_records
 
@@ -59,15 +59,15 @@ def execute():
                     )
 
                     # BMIによる肥満度の判定
-                    fat_level = db_util.calc_fat_level(bmi, age)
+                    fat_level = calc_util.calc_fat_level(bmi, age)
 
                     # 残りの平均体重への体重の差
-                    remain_standard = db_util.calc_remain_standard(
+                    remain_standard = calc_util.calc_remain_standard(
                         weight_kg, standard_weight
                     )
 
                     # 残りの目標体重への体重の差
-                    remain_target = db_util.calc_remain_target(weight_kg, target_weight)
+                    remain_target = calc_util.calc_remain_target(weight_kg, target_weight)
 
                     # 結果を表示
                     print()

@@ -1,5 +1,4 @@
 import mysql.connector
-
 from ..util import db_util
 from ..util import input_util
 from ..db import access_users
@@ -11,26 +10,32 @@ def execute():
         cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
-        text = []
-
-        print("*** ユーザ情報検索 ***")
+        print("*** 身長更新 ***")
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
+        # 入力したユーザ名がテーブルが存在するかチェック
         rows = access_users.find_by_name_user(cursor, name)
 
         if len(rows) != 0:
-            for row in rows:
+            height = input_util.input_replace("身長を入力してください(cm) : ")
+
+            result_confirm = input_util.confirming(
+                "本当に更新してもよろしいでしょうか(Y/n)"
+            )
+
+            if result_confirm:
+                # 指定された名前の身長を更新する
+                access_users.update_height(cursor, name, height)
+
+                cnx.commit()
+
+                print()
+                print("身長を更新しました")
                 print()
 
-                text.append(f"ユーザ名: {row['name']}")
-                text.append(f"生年月日: {row['birthday']}")
-                text.append(f"身長: {row['height']} cm")
-                text.append(f"目標体重: {row['target_weight']} kg")
-
-                # リストから音声を再生する
-                db_util.play_sound(text)
-                print()
+            else:
+                print("更新をキャンセルしました")
 
         else:
             print("[Error] そのユーザ名は存在しません")

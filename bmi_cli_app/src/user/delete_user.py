@@ -1,5 +1,4 @@
 import mysql.connector
-
 from ..util import db_util
 from ..util import input_util
 from ..db import access_users
@@ -35,7 +34,7 @@ def execute():
             print(f"体重記録: {len(record_rows)}件")
             print()
 
-            result_confirm = db_util.confirming(
+            result_confirm = input_util.confirming(
                 "このデータをすべて削除してもよろしいですか？(y/n): "
             )
 

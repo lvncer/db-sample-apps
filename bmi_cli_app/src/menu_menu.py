@@ -1,5 +1,5 @@
-from .users import menu_users
-from .weight_records import menu_records
+from .user import menu_users
+from .weight import menu_records
 from .util import input_util
 
 

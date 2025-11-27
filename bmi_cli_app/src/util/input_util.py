@@ -16,6 +16,18 @@ def input_int(prompt):
     return int(str)
 
 
+def confirming(prompt):
+    while True:
+        message = input(prompt).strip().lower()
+
+        if message == "y":
+            return True
+        elif message == "n":
+            return False
+        else:
+            print("Yかnで入力してください")
+
+
 # キーボードの入力内容を小数で返します
 def input_float(prompt):
     while True:

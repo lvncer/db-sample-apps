@@ -1,5 +1,4 @@
 import mysql.connector
-
 from ..util import db_util
 from ..util import input_util
 from ..db import access_users

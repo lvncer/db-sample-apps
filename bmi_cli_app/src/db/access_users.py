@@ -63,7 +63,7 @@ def find_delete_id(cursor, name, id):
         FROM weight_records LEFT OUTER JOIN users
         ON weight_records.user_id = users.id
         WHERE name = %s AND weight_records.id = %s;
-        """
+    """
 
     data = [name, id]
     cursor.execute(sql, data)

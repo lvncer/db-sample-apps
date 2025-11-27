@@ -4,9 +4,9 @@ from io import BytesIO
 import mysql.connector
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
-
 from ..util import db_util
 from ..util import input_util
+from ..util import calc_util
 from ..db import access_weight_records
 
 
@@ -109,11 +109,11 @@ def output_html(rows):
             )
 
             # BMIによる肥満度の判定
-            fat_level = db_util.calc_fat_level(bmi, age)
+            fat_level = calc_util.calc_fat_level(bmi, age)
 
-            remain_standard = db_util.calc_remain_standard(weight_kg, standard_weight)
+            remain_standard = calc_util.calc_remain_standard(weight_kg, standard_weight)
 
-            remain_target = db_util.calc_remain_target(weight_kg, target_weight)
+            remain_target = calc_util.calc_remain_target(weight_kg, target_weight)
 
             file.write("<tr>\n")
             file.write(f"<td>{row['id']}\n")

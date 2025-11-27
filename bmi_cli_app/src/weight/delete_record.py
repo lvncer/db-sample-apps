@@ -1,8 +1,8 @@
 import datetime
 import mysql.connector
-
 from ..util import db_util
 from ..util import input_util
+from ..util import calc_util
 from ..db import access_users
 from ..db import access_weight_records
 
@@ -60,7 +60,7 @@ def execute():
                     )
 
                     # BMIによる肥満度の判定
-                    fat_level = db_util.calc_fat_level(bmi, age)
+                    fat_level = calc_util.calc_fat_level(bmi, age)
 
                     print()
                     print(f"id: {id}")
@@ -70,7 +70,7 @@ def execute():
                     print(f"肥満度: {fat_level}")
                     print()
 
-                result_confirm = db_util.confirming(
+                result_confirm = input_util.confirming(
                     "削除してもよろしいですか？ [y/n] : "
                 )
 
