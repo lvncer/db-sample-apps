@@ -1,4 +1,3 @@
-import datetime
 import mysql.connector
 from ..util import db_util
 from ..util import input_util
@@ -20,7 +19,9 @@ def execute():
         if user_obj:
             deleting_id = input_util.input_int("削除するIDを入力してください : ")
 
-            weight_record_obj = access_weight_records.find_by_id(cursor, deleting_id)
+            weight_record_obj = access_weight_records.find_by_id(
+                cursor, deleting_id
+            )
             if weight_record_obj:
                 id = weight_record_obj.id
                 height_cm = float(weight_record_obj.height)

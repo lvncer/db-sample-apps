@@ -78,42 +78,33 @@ def output_html(rows):
         file.write("<td>目標体重</td>\n")
         file.write("</tr>\n")
 
-        # selectしたレコードを出力
         for row in rows:
             height_cm = float(row["height"])
             weight_kg = float(row["weight"])
             target_weight = float(row["target_weight"])
             birthday = row["birthday"]
 
-            # 身長をセンチからメートル単位に変更する
             height_m = height_cm / 100
 
-            # BMI計算
-            bmi = weight_kg / (height_m**2.0)
-            # 小数点以下第1桁まで表示する
-            bmi = round(bmi, 1)
+            bmi = round(weight_kg / (height_m**2.0), 1)
+            standard_weight = round(height_m**2 * 22, 1)
 
-            # 標準体重計算
-            standard_weight = height_m**2 * 22
-            # 小数点以下第1桁まで表示する
-            standard_weight = round(standard_weight, 1)
-
-            # 現在時刻の取得[%Y-%m-%d %H:%M:%S]
             d_today = datetime.datetime.now()
-
-            # 年齢を計算する
             age = (
                 d_today.year
                 - birthday.year
-                - ((d_today.month, d_today.day) < (birthday.month, birthday.day))
+                - ((d_today.month, d_today.day) <
+                   (birthday.month, birthday.day))
             )
 
-            # BMIによる肥満度の判定
             fat_level = calc_util.calc_fat_level(bmi, age)
 
-            remain_standard = calc_util.calc_remain_standard(weight_kg, standard_weight)
-
-            remain_target = calc_util.calc_remain_target(weight_kg, target_weight)
+            remain_standard = calc_util.calc_remain_standard(
+                weight_kg, standard_weight
+            )
+            remain_target = calc_util.calc_remain_target(
+                weight_kg, target_weight
+            )
 
             file.write("<tr>\n")
             file.write(f"<td>{row['id']}\n")
@@ -128,7 +119,6 @@ def output_html(rows):
 
         file.write("</table>")
 
-        # グラフの埋め込み
         file.write("<h2>体重の変化</h2>")
         file.write(
             '<img src="data:image/png;base64,{}" alt="体重の変化">'.format(

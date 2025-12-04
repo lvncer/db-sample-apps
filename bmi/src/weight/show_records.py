@@ -20,7 +20,9 @@ def execute():
         if user_obj:
             user_id = user_obj.id
             birthday = user_obj.birthday
-            weight_records = access_weight_records.find_by_user_id(cursor, user_id)
+            weight_records = access_weight_records.find_by_user_id(
+                cursor, user_id
+            )
             if weight_records:
                 for weight_record in weight_records:
                     id = weight_record.id

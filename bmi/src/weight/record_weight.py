@@ -40,8 +40,12 @@ def execute():
 
             age = calc_util.calc_age(birthday)
             fat_level = calc_util.calc_fat_level(bmi, age)
-            remain_standard = calc_util.calc_remain_standard(weight_kg, standard_weight)
-            remain_target = calc_util.calc_remain_target(weight_kg, target_weight)
+            remain_standard = calc_util.calc_remain_standard(
+                weight_kg, standard_weight
+            )
+            remain_target = calc_util.calc_remain_target(
+                weight_kg, target_weight
+            )
 
             d_today = datetime.datetime.now()
             access_weight_records.insert_weight_records(

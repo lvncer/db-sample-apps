@@ -25,7 +25,9 @@ def execute():
             print(f"目標体重: {deleting_user_obj.target_weight} kg")
             print()
 
-            record_rows = access_weight_records.find_by_user_id(cursor, deleting_user_obj.id)
+            record_rows = access_weight_records.find_by_user_id(
+                cursor, deleting_user_obj.id
+            )
 
             print(f"体重記録: {len(record_rows)}件")
             print()
