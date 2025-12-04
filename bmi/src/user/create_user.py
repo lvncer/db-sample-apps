@@ -31,11 +31,6 @@ def execute():
 
             access_users.create_user(cursor, user_obj)
             cnx.commit()
-
-            print()
-            print("ユーザを登録しました")
-            print()
-
         else:
             print("[Error] そのユーザー名はすでに存在します")
             print()
@@ -43,6 +38,11 @@ def execute():
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
+
+    else:
+        print()
+        print("ユーザを登録しました")
+        print()
 
     finally:
         cursor.close()

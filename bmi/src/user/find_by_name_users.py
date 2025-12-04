@@ -6,7 +6,6 @@ from ..db import access_users
 
 def execute():
     try:
-        # mysqlに接続
         cnx = db_util.connect()
         cursor = cnx.cursor(dictionary=True)
 
@@ -14,16 +13,15 @@ def execute():
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        row = access_users.find_by_name(cursor, name)
-
-        if row:
+        is_user_exists = access_users.find_by_name(cursor, name)
+        if is_user_exists:
+            user = is_user_exists
             print()
-            print(f"ユーザ名: {row.name}")
-            print(f"生年月日: {row.birthday}")
-            print(f"身長: {row.height} cm")
-            print(f"目標体重: {row.target_weight} kg")
+            print(f"ユーザ名: {user.name}")
+            print(f"生年月日: {user.birthday}")
+            print(f"身長: {user.height} cm")
+            print(f"目標体重: {user.target_weight} kg")
             print()
-
         else:
             print("[Error] そのユーザ名は存在しません")
 

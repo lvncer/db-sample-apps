@@ -12,13 +12,7 @@ def find_by_name(cursor, name) -> User | None:
     row = cursor.fetchone()
 
     if row:
-        return User(
-            id=row["id"],
-            name=row["name"],
-            birthday=row["birthday"],
-            height=row["height"],
-            target_weight=row["target_weight"],
-        )
+        return User(**row)
     return None
 
 
