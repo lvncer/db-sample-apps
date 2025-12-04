@@ -39,7 +39,7 @@ def execute():
             if is_delete_confirm:
                 deleting_id = access_users.find_by_name(cursor, name).id
 
-                access_weight_records.delete_records(cursor, deleting_id)
+                access_weight_records.delete_by_user_id(cursor, deleting_id)
                 access_users.delete_user(cursor, deleting_id)
                 cnx.commit()
 

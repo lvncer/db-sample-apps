@@ -50,7 +50,7 @@ def execute():
                     "削除してもよろしいですか？ [y/n] : "
                 )
                 if result_confirm:
-                    access_weight_records.delete_records_by_id(cursor, id)
+                    access_weight_records.delete_by_id(cursor, id)
                     cnx.commit()
 
                     print("削除しました")

@@ -1,12 +1,9 @@
 import datetime
-import base64
-from io import BytesIO
 import mysql.connector
-import matplotlib.pyplot as plt
-from matplotlib.font_manager import FontProperties
 from ..util import db_util
 from ..util import input_util
 from ..util import calc_util
+from ..db import access_users
 from ..db import access_weight_records
 
 
@@ -22,15 +19,25 @@ def execute():
         date = input_util.input_month("出力する年月を入力してください:")
         date = date + "-01"
 
-        # データベースから該当する体重記録を全件取得
-        rows = access_weight_records.select_all(cursor, name, date)
+        user_obj = access_users.find_by_name(cursor, name)
+        if user_obj:
+            user_id = user_obj.id
+            birthday = user_obj.birthday
 
-        # HTML形式でファイル出力
-        output_html(rows)
+            # データベースから該当する体重記録を全件取得
+            rows = access_weight_records.select_all_by_user_id_and_date(
+                cursor, user_id, date
+            )
 
-        print()
-        print("ファイルに出力しました")
-        print()
+            # HTML形式でファイル出力
+            output_html(birthday, rows)
+
+            print()
+            print("ファイルに出力しました")
+            print()
+        else:
+            print("[Error] そのユーザ名は存在しません")
+            print()
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
@@ -41,7 +48,7 @@ def execute():
         cnx.close()
 
 
-def output_html(rows):
+def output_html(birthday, rows):
     file_name = "all_records.html"
 
     with open(file_name, mode="w", encoding="utf-8", newline="\n") as file:
@@ -79,10 +86,9 @@ def output_html(rows):
         file.write("</tr>\n")
 
         for row in rows:
-            height_cm = float(row["height"])
-            weight_kg = float(row["weight"])
-            target_weight = float(row["target_weight"])
-            birthday = row["birthday"]
+            height_cm = float(row.height)
+            weight_kg = float(row.weight)
+            target_weight = float(row.target_weight)
 
             height_m = height_cm / 100
 
@@ -107,8 +113,8 @@ def output_html(rows):
             )
 
             file.write("<tr>\n")
-            file.write(f"<td>{row['id']}\n")
-            file.write(f"<td>{row['record_date']}\n")
+            file.write(f"<td>{row.id}\n")
+            file.write(f"<td>{row.record_date}\n")
             file.write(f"<td>{height_cm}\n")
             file.write(f"<td>{weight_kg}\n")
             file.write(f"<td>{bmi}\n")
@@ -118,45 +124,8 @@ def output_html(rows):
             file.write("</tr>\n")
 
         file.write("</table>")
-
-        file.write("<h2>体重の変化</h2>")
-        file.write(
-            '<img src="data:image/png;base64,{}" alt="体重の変化">'.format(
-                plot_weight_changes(rows)
-            )
-        )
-
         file.write("</body>\n")
         file.write("</html>\n")
-
-
-def plot_weight_changes(rows):
-    # 体重の変化をグラフに描画
-    dates = [row["record_date"] for row in rows]
-    weights = [float(row["weight"]) for row in rows]
-
-    plt.figure(figsize=(10, 5))
-
-    # フォントの指定
-    font_path = "C:/Windows/Fonts/msgothic.ttc"
-    font_prop = FontProperties(fname=font_path)
-    plt.rcParams["font.family"] = font_prop.get_name()
-
-    plt.plot(dates, weights, marker="o")
-    plt.title("体重の変化")
-    plt.xlabel("日付")
-    plt.ylabel("体重(kg)")
-    plt.grid(True)
-
-    # グラフをバイト列に変換してbase64エンコード
-    img_data = BytesIO()
-    plt.savefig(img_data, format="png")
-    img_data.seek(0)
-    img_base64 = base64.b64encode(img_data.read()).decode("utf-8")
-
-    plt.close()  # メモリリークを防ぐためにクローズ
-
-    return img_base64
 
 
 if __name__ == "__main__":

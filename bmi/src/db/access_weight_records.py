@@ -63,7 +63,7 @@ def insert_weight_records(
 
 
 # 入力されたユーザーidで削除を確定する
-def delete_records(cursor, user_id):
+def delete_by_user_id(cursor, user_id):
     sql = """
         DELETE FROM weight_records WHERE user_id = %s;
     """
@@ -73,17 +73,7 @@ def delete_records(cursor, user_id):
 
 
 # 入力されたidで削除を確定する
-def delete_records_by_id(cursor, id):
-    sql = """
-        DELETE FROM weight_records WHERE id = %s;
-    """
-
-    data = [id]
-    cursor.execute(sql, data)
-
-
-# 入力されたidで削除を確定する
-def delete_by_user_id(cursor, id):
+def delete_by_id(cursor, id):
     sql = """
         DELETE FROM weight_records WHERE id = %s;
     """
@@ -93,23 +83,29 @@ def delete_by_user_id(cursor, id):
 
 
 # 出力用の全てのレコードを取得する
-def select_all(cursor, name, dates):
+def select_all_by_user_id_and_date(cursor, user_id, dates) -> List[
+        weight_record.WeightRecord]:
     sql = """
-        select
-            weight_records.id AS id,
-            record_date,
-            weight_records.height,
-            weight_records.weight,
-            weight_records.target_weight,
-            birthday
-        FROM weight_records LEFT OUTER JOIN users
-        ON weight_records.user_id = users.id
+        SELECT * FROM weight_records
         WHERE
-            users.name = %s AND record_date BETWEEN %s AND LAST_DAY(%s);
+            user_id = %s AND record_date BETWEEN %s AND LAST_DAY(%s);
         """
 
-    data = [name, dates, dates]
+    data = [user_id, dates, dates]
     cursor.execute(sql, data)
     rows = cursor.fetchall()
 
-    return rows
+    weight_record_list = []
+    if rows:
+        for row in rows:
+            weight_record_list.append(
+                weight_record.WeightRecord(
+                    id=row["id"],
+                    user_id=row["user_id"],
+                    record_date=row["record_date"],
+                    height=row["height"],
+                    weight=row["weight"],
+                    target_weight=row["target_weight"],
+                )
+            )
+    return weight_record_list
