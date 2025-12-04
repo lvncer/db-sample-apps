@@ -1,4 +1,3 @@
-import datetime
 import mysql.connector
 from ..util import db_util
 from ..util import input_util
@@ -26,31 +25,18 @@ def execute():
             if weight_records:
                 for weight_record in weight_records:
                     id = weight_record.id
-                    height_cm = weight_record.height
-                    weight_kg = weight_record.weight
-                    target_weight = weight_record.target_weight
-                    record_date = weight_record.record_date
-
-                    height_m = height_cm / 100
-                    bmi = round(weight_kg / (height_m**2), 1)
-                    standard_weight = round(height_m**2 * 22, 1)
-
-                    d_today = datetime.datetime.now()
-                    age = (
-                        d_today.year
-                        - birthday.year
-                        - (
-                            (d_today.month, d_today.day)
-                            < (birthday.month, birthday.day)
-                        )
-                    )
-
-                    fat_level = calc_util.calc_fat_level(bmi, age)
-                    remain_standard = calc_util.calc_remain_standard(
-                        weight_kg, standard_weight
-                    )
-                    remain_target = calc_util.calc_remain_target(
-                        weight_kg, target_weight
+                    (
+                        height_cm,
+                        weight_kg,
+                        target_weight,
+                        record_date,
+                        bmi,
+                        standard_weight,
+                        fat_level,
+                        remain_standard,
+                        remain_target,
+                    ) = calc_util.calc_weight_record_metrics(
+                        weight_record, birthday
                     )
 
                     print()

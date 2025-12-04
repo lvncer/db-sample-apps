@@ -24,19 +24,21 @@ def execute():
             )
             if weight_record_obj:
                 id = weight_record_obj.id
-                height_cm = float(weight_record_obj.height)
-                weight_kg = float(weight_record_obj.weight)
-                record_date = weight_record_obj.record_date
                 birthday = user_obj.birthday
 
-                # 身長をセンチからメートル単位に変更する
-                height_m = height_cm / 100
-
-                bmi = round(weight_kg / (height_m**2), 1)
-                standard_weight = round(height_m**2 * 22, 1)
-
-                age = calc_util.calc_age(birthday)
-                fat_level = calc_util.calc_fat_level(bmi, age)
+                (
+                    _height_cm,
+                    _weight_kg,
+                    _target_weight,
+                    record_date,
+                    bmi,
+                    standard_weight,
+                    fat_level,
+                    _remain_standard,
+                    _remain_target,
+                ) = calc_util.calc_weight_record_metrics(
+                    weight_record_obj, birthday
+                )
 
                 print()
                 print(f"id: {id}")

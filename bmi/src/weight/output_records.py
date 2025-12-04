@@ -1,4 +1,3 @@
-import datetime
 import mysql.connector
 from ..util import db_util
 from ..util import input_util
@@ -86,35 +85,21 @@ def output_html(birthday, rows):
         file.write("</tr>\n")
 
         for row in rows:
-            height_cm = float(row.height)
-            weight_kg = float(row.weight)
-            target_weight = float(row.target_weight)
-
-            height_m = height_cm / 100
-
-            bmi = round(weight_kg / (height_m**2.0), 1)
-            standard_weight = round(height_m**2 * 22, 1)
-
-            d_today = datetime.datetime.now()
-            age = (
-                d_today.year
-                - birthday.year
-                - ((d_today.month, d_today.day) <
-                   (birthday.month, birthday.day))
-            )
-
-            fat_level = calc_util.calc_fat_level(bmi, age)
-
-            remain_standard = calc_util.calc_remain_standard(
-                weight_kg, standard_weight
-            )
-            remain_target = calc_util.calc_remain_target(
-                weight_kg, target_weight
-            )
+            (
+                height_cm,
+                weight_kg,
+                target_weight,
+                record_date,
+                bmi,
+                standard_weight,
+                fat_level,
+                remain_standard,
+                remain_target,
+            ) = calc_util.calc_weight_record_metrics(row, birthday)
 
             file.write("<tr>\n")
             file.write(f"<td>{row.id}\n")
-            file.write(f"<td>{row.record_date}\n")
+            file.write(f"<td>{record_date}\n")
             file.write(f"<td>{height_cm}\n")
             file.write(f"<td>{weight_kg}\n")
             file.write(f"<td>{bmi}\n")

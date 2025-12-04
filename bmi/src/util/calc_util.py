@@ -71,3 +71,31 @@ def calc_age(birthday):
         - ((d_today.month, d_today.day) < (birthday.month, birthday.day))
     )
     return age
+
+
+def calc_weight_record_metrics(weight_record, birthday):
+    height_cm = float(weight_record.height)
+    weight_kg = float(weight_record.weight)
+    target_weight = float(weight_record.target_weight)
+    record_date = weight_record.record_date
+
+    height_m = height_cm / 100
+    bmi = round(weight_kg / (height_m**2), 1)
+    standard_weight = round(height_m**2 * 22, 1)
+
+    age = calc_age(birthday)
+    fat_level = calc_fat_level(bmi, age)
+    remain_standard = calc_remain_standard(weight_kg, standard_weight)
+    remain_target = calc_remain_target(weight_kg, target_weight)
+
+    return (
+        height_cm,
+        weight_kg,
+        target_weight,
+        record_date,
+        bmi,
+        standard_weight,
+        fat_level,
+        remain_standard,
+        remain_target,
+    )
