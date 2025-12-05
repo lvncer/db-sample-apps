@@ -73,11 +73,12 @@ def calc_age(birthday):
     return age
 
 
-def calc_weight_record_metrics(weight_record, birthday):
-    height_cm = float(weight_record.height)
-    weight_kg = float(weight_record.weight)
-    target_weight = float(weight_record.target_weight)
-    record_date = weight_record.record_date
+def calc_metrics_from_values(
+    height_cm, weight_kg, target_weight, birthday, record_date
+):
+    height_cm = float(height_cm)
+    weight_kg = float(weight_kg)
+    target_weight = float(target_weight)
 
     height_m = height_cm / 100
     bmi = round(weight_kg / (height_m**2), 1)
@@ -99,3 +100,18 @@ def calc_weight_record_metrics(weight_record, birthday):
         remain_standard,
         remain_target,
     )
+
+
+def calc_weight_record_metrics(weight_record, birthday):
+    return calc_metrics_from_values(
+        weight_record.height,
+        weight_record.weight,
+        weight_record.target_weight,
+        birthday,
+        weight_record.record_date,
+    )
+
+
+def is_birthday_today(birthday):
+    d_today = datetime.datetime.now()
+    return d_today.month == birthday.month and d_today.day == birthday.day

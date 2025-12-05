@@ -14,10 +14,11 @@ def execute():
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        deleting_user_obj = access_users.find_by_name(cursor, name)
+        is_user_exists = access_users.find_by_name(cursor, name)
 
-        if deleting_user_obj:
-            # 削除対象の表示
+        if is_user_exists:
+            deleting_user_obj = is_user_exists
+
             print()
             print(f"ユーザ名: {deleting_user_obj.name}")
             print(f"生年月日: {deleting_user_obj.birthday}")
@@ -37,11 +38,10 @@ def execute():
             )
 
             if is_delete_confirm:
-                deleting_id = access_users.find_by_name(cursor, name).id
+                deleting_id = deleting_user_obj.id
 
                 access_weight_records.delete_by_user_id(cursor, deleting_id)
-                access_users.delete_user(cursor, deleting_id)
-                cnx.commit()
+                access_users.delete_by_id(cursor, deleting_id)
 
                 print("削除しました")
                 print()
@@ -56,6 +56,9 @@ def execute():
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
+
+    else:
+        cnx.commit()
 
     finally:
         cursor.close()

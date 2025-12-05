@@ -21,10 +21,11 @@ def execute():
                 delete_record.execute()
             case 4:
                 output_records.execute()
-            case _:
+            case 5:
                 print("操作を終了します")
-                print()
-                break
+                return
+            case _:
+                print("無効な値です")
 
 
 def print_menu():

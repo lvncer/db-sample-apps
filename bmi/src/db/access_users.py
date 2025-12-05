@@ -46,7 +46,7 @@ def update_target_weight(cursor, target_weight, name):
     cursor.execute(sql, data)
 
 
-def delete_user(cursor, id):
+def delete_by_id(cursor, id):
     sql = """
         DELETE FROM users WHERE id = %s;
     """

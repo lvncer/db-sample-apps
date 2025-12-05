@@ -1,8 +1,8 @@
-import datetime
 import mysql.connector
 from ..util import db_util
 from ..util import input_util
 from ..util import calc_util
+from ..util import validate_util
 from ..db import access_users
 from ..db import access_weight_records
 
@@ -20,12 +20,7 @@ def execute():
         if user_obj:
             while True:
                 weight_kg = input_util.input_float("体重を入力してください(kg) : ")
-
-                if weight_kg <= 0:
-                    print("体重は正の値を入力してください")
-                elif weight_kg > 1000:
-                    print("体重は1000kg未満の値を入力してください")
-                else:
+                if validate_util.validate_weight(weight_kg):
                     break
 
             user_id = user_obj.id
@@ -33,25 +28,27 @@ def execute():
             target_weight = float(user_obj.target_weight)
             birthday = user_obj.birthday
 
-            height_m = height_cm / 100
-
-            bmi = round(weight_kg / (height_m**2), 1)
-            standard_weight = round(height_m**2 * 22, 1)
-
-            age = calc_util.calc_age(birthday)
-            fat_level = calc_util.calc_fat_level(bmi, age)
-            remain_standard = calc_util.calc_remain_standard(
-                weight_kg, standard_weight
-            )
-            remain_target = calc_util.calc_remain_target(
-                weight_kg, target_weight
-            )
-
-            d_today = datetime.datetime.now()
             access_weight_records.insert_weight_records(
-                cursor, user_id, d_today, height_cm, weight_kg, target_weight
+                cursor, user_id, height_cm, weight_kg, target_weight
             )
-            cnx.commit()
+
+            (
+                height_cm,
+                weight_kg,
+                target_weight,
+                _record_date,
+                bmi,
+                standard_weight,
+                fat_level,
+                remain_standard,
+                remain_target,
+            ) = calc_util.calc_metrics_from_values(
+                height_cm,
+                weight_kg,
+                target_weight,
+                birthday,
+                record_date=None,
+            )
 
             print()
             print("---- BMI計算 ----")
@@ -63,13 +60,8 @@ def execute():
             print(f"目標体重: {target_weight} (あと{remain_target}kg)")
             print()
 
-            today = datetime.datetime.today().date()
-            today_month = today.strftime("%m")
-            today_day = today.strftime("%d")
-            birthday_month = birthday.strftime("%m")
-            birthday_day = birthday.strftime("%d")
-            if today_month == birthday_month and today_day == birthday_day:
-                print("誕生日おめでとうございます！")
+            if calc_util.is_birthday_today(birthday):
+                print("今日はあなたの誕生日です！")
 
             print("体重を記録しました")
 
@@ -79,6 +71,9 @@ def execute():
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
+
+    else:
+        cnx.commit()
 
     finally:
         cursor.close()

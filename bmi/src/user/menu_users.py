@@ -24,9 +24,11 @@ def execute():
                 update_target_weight.execute()
             case 5:
                 delete_user.execute()
-            case _:
+            case 6:
                 print("操作を終了します")
-                break
+                return
+            case _:
+                print("無効な値です")
 
 
 def print_menu():
