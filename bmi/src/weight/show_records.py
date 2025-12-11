@@ -4,6 +4,7 @@ from ..util import input_util
 from ..util import calc_util
 from ..db import access_users
 from ..db import access_weight_records
+from ..util import print_util
 
 
 def execute():
@@ -19,9 +20,7 @@ def execute():
         if user_obj:
             user_id = user_obj.id
             birthday = user_obj.birthday
-            weight_records = access_weight_records.find_by_user_id(
-                cursor, user_id
-            )
+            weight_records = access_weight_records.find_by_user_id(cursor, user_id)
             if weight_records:
                 for weight_record in weight_records:
                     id = weight_record.id
@@ -35,20 +34,20 @@ def execute():
                         fat_level,
                         remain_standard,
                         remain_target,
-                    ) = calc_util.calc_weight_record_metrics(
-                        weight_record, birthday
-                    )
+                    ) = calc_util.calc_weight_record_metrics(weight_record, birthday)
 
-                    print()
-                    print(f"id: {id}")
-                    print(f"日付: {record_date}")
-                    print(f"身長: {height_cm}")
-                    print(f"体重: {weight_kg}")
-                    print(f"BMI: {bmi}")
-                    print(f"標準体重: {standard_weight} (あと{remain_standard}kg)")
-                    print(f"肥満度: {fat_level}")
-                    print(f"目標体重: {target_weight} (あと{remain_target}kg)")
-                    print()
+                    print_util.print_weight_metrics(
+                        id=id,
+                        record_date=record_date,
+                        height_cm=height_cm,
+                        weight_kg=weight_kg,
+                        bmi=bmi,
+                        standard_weight=standard_weight,
+                        fat_level=fat_level,
+                        target_weight=target_weight,
+                        remain_standard=remain_standard,
+                        remain_target=remain_target,
+                    )
 
                 print(f"{len(weight_records)}件表示しました")
                 print()

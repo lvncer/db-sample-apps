@@ -4,6 +4,7 @@ from ..util import input_util
 from ..util import calc_util
 from ..db import access_users
 from ..db import access_weight_records
+from ..util import print_util
 
 
 def execute():
@@ -19,9 +20,7 @@ def execute():
         if user_obj:
             deleting_id = input_util.input_int("削除するIDを入力してください : ")
 
-            weight_record_obj = access_weight_records.find_by_id(
-                cursor, deleting_id
-            )
+            weight_record_obj = access_weight_records.find_by_id(cursor, deleting_id)
             if weight_record_obj:
                 id = weight_record_obj.id
                 birthday = user_obj.birthday
@@ -36,17 +35,15 @@ def execute():
                     fat_level,
                     _remain_standard,
                     _remain_target,
-                ) = calc_util.calc_weight_record_metrics(
-                    weight_record_obj, birthday
-                )
+                ) = calc_util.calc_weight_record_metrics(weight_record_obj, birthday)
 
-                print()
-                print(f"id: {id}")
-                print(f"日付: {record_date}")
-                print(f"BMI: {bmi}")
-                print(f"標準体重: {standard_weight} kg")
-                print(f"肥満度: {fat_level}")
-                print()
+                print_util.print_weight_metrics(
+                    id=id,
+                    record_date=record_date,
+                    bmi=bmi,
+                    standard_weight=standard_weight,
+                    fat_level=fat_level,
+                )
 
                 result_confirm = input_util.confirming(
                     "削除してもよろしいですか？ [y/n] : "
