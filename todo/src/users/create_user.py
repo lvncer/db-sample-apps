@@ -13,31 +13,28 @@ def execute():
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        rows = access_users.find_by_name_user(cursor, name)
+        user = access_users.find_by_name(cursor, name)
+        if not user:
+            birthday = input_util.input_date("生年月日を入力してください [%Y-%m-%d] : ")
 
-        create_user(rows, cursor, name, cnx)
+            access_users.create_user(cursor, name, birthday)
+
+            print()
+            print("ユーザを登録しました")
+        else:
+            print()
+            print("[Error] そのユーザー名はすでに存在します")
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
 
+    else:
+        cnx.commit()
+
     finally:
         cursor.close()
         cnx.close()
-
-
-def create_user(rows, cursor, name, cnx):
-    if len(rows) == 0:
-        birthday = input_util.input_date("生年月日を入力してください [%Y-%m-%d] : ")
-
-        access_users.create_user(cursor, name, birthday)
-        cnx.commit()
-
-        print()
-        print("ユーザを登録しました")
-    else:
-        print()
-        print("[Error] そのユーザー名はすでに存在します")
 
 
 if __name__ == "__main__":

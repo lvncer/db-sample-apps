@@ -13,18 +13,6 @@ def connect():
     return cnx
 
 
-# 更新するときに確認をしてyが入力されればtrueを返す
-def confirming(prompt):
-    while True:
-        message = input(prompt).strip().lower()
-        if message == "y":
-            return True
-        elif message == "n":
-            return False
-        else:
-            print("Yかnで入力してください")
-
-
 def change_priority(priority):
     if priority == 1:
         priority = '高'
