@@ -4,28 +4,29 @@ from ..util import db_util
 from ..util import input_util
 from ..db import access_users
 from ..db import access_todo_records
+from ..db.user import User
 
 
 def execute():
     try:
-        # mysqlに接続
         cnx = db_util.connect()
-        # カーソルを作成
         cursor = cnx.cursor(dictionary=True)
 
-        print('*** TODO出力 ***')
+        print("*** TODO出力 ***")
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        # userテーブルから該当するユーザの情報を取得する
-        user_rows = access_users.find_by_name_user(cursor, name)
+        user = access_users.find_by_name(cursor, name)
+        if user:
+            output_html(cursor, user)
 
-        # HTML形式でファイル出力
-        output_html(cursor, user_rows)
-
-        print()
-        print('ファイルに出力しました')
-        print()
+            print()
+            print("ファイルに出力しました")
+            print()
+        else:
+            print()
+            print("[Error] そのユーザ名は存在しません")
+            print()
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
@@ -36,7 +37,7 @@ def execute():
         cnx.close()
 
 
-def output_html(cursor, user_rows):
+def output_html(cursor, user: User):
     file_name = "todo_records.html"
 
     with open(file_name, mode="w", encoding="utf-8", newline="\n") as file:
@@ -68,37 +69,28 @@ def output_html(cursor, user_rows):
         file.write("<td>優先度</td>\n")
         file.write("</tr>\n")
 
-        print('並び順')
-        print('1: 優先度高い順')
-        print('2: 期限短い順')
-        print('を入力してください: ', end='')
+        print("並び順")
+        print("1: 優先度高い順")
+        print("2: 期限短い順")
+        print("を入力してください: ", end="")
 
         sort_prompt = input_util.input_sort_order()
 
-        user_id = user_rows[0]["id"]
+        user_id = user.id
 
-        # 該当するすべてのレコードを取得する
-        todo_rows = access_todo_records.find_by_user_id_todo_records(
+        todo_records = access_todo_records.find_by_user_id_sort_order(
             cursor, user_id, sort_prompt
         )
 
-        # selectしたレコードを出力
-        for row in todo_rows:
-            id = row['id']
-            title = row['title']
-            deadline = row['deadline']
-            priority = row['priority']
-
-            if deadline == datetime.date(9999, 12, 31):
-                deadline = ''
-
-            priority = db_util.change_priority(priority)
+        for todo_record in todo_records:
+            deadline = input_util.change_deadline_to_empty_string(todo_record.deadline)
+            priority_str = input_util.change_priority_to_string(todo_record.priority)
 
             file.write("<tr>\n")
-            file.write(f"<td>{id}\n")
-            file.write(f"<td>{title}\n")
+            file.write(f"<td>{todo_record.id}\n")
+            file.write(f"<td>{todo_record.title}\n")
             file.write(f"<td>{deadline}\n")
-            file.write(f"<td>{priority}\n")
+            file.write(f"<td>{priority_str}\n")
             file.write("</tr>\n")
 
         file.write("</table>")

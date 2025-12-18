@@ -66,18 +66,32 @@ def input_priority(prompt):
     return str
 
 
-def input_sort_order():
+def input_sort_order() -> str:
     while True:
         sort_order = input()
+        match sort_order:
+            case "1":
+                return "priority"
+            case "2":
+                return "deadline"
+            case _:
+                print("1か2を入力してください")
+                print("もう一度入力してください : ", end="")
 
-        if sort_order == "1":
-            sort_prompt = "priority"
-            break
-        elif sort_order == "2":
-            sort_prompt = "deadline"
-            break
-        else:
-            print("1か2を入力してください")
-            print("もう一度入力してください : ", end="")
-            continue
-    return sort_prompt
+
+def change_priority_to_string(priority: int) -> str | None:
+    match priority:
+        case 1:
+            return "高"
+        case 2:
+            return "中"
+        case 3:
+            return "低"
+        case _:
+            return None
+
+
+def change_deadline_to_empty_string(deadline: datetime.date) -> str | datetime.date:
+    if deadline == datetime.date(9999, 12, 31):
+        return ""
+    return deadline

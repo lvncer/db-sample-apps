@@ -1,11 +1,3 @@
-# メインメニュープログラム
-# usersとtodo_recordsのメニューを出力する
-
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from .users import menu_user
 from .todo_records import menu_todo_records
 from .quests import menu_quest
@@ -13,35 +5,28 @@ from .util import input_util
 
 
 def execute():
-    print('###############')
-    print(' TODOアプリ')
-    print('###############')
+    print("###############")
+    print(" TODOアプリ")
+    print("###############")
     print()
     print("=== メイン メニュー ===")
-
-    # メニューの表示
     print_menu()
 
     while True:
-        # キーボードからメニュー番号を入力させる
         no = input_util.input_int("メニューを選択してください : ")
-
-        # 番号によってモジュールの関数を実行
-        if no == 1:
-            menu_user.execute()
-        elif no == 2:
-            menu_todo_records.execute()
-        elif no == 3:
-            menu_quest.execute()
-        elif no == 4:
-            print()
-            print("終了します")
-            break
-        else:
-            print()
-            print("無効な値です")
-            print_menu()
-            print()
+        match no:
+            case 1:
+                menu_user.execute()
+            case 2:
+                menu_todo_records.execute()
+            case 3:
+                menu_quest.execute()
+            case 4:
+                print("終了します")
+                break
+            case _:
+                print("無効な値です")
+                print_menu()
 
 
 def print_menu():
