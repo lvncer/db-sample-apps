@@ -6,19 +6,15 @@ from ..db import access_users
 
 def execute():
     try:
-        # mysqlに接続
         cnx = db_util.connect()
-        # カーソルを作成
         cursor = cnx.cursor(dictionary=True)
 
         print("*** ユーザ表示 ***")
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        # 入力したユーザ名がテーブルが存在するかチェック
         rows = access_users.find_by_name_user(cursor, name)
 
-        # 表示する
         show_user(rows)
 
     except mysql.connector.Error as e:
@@ -38,7 +34,6 @@ def show_user(rows):
             print(f"生年月日: {row['birthday']}")
             print(f"経験値: {row['experience']}")
             print(f"敵撃破状況: {row['progress'] - 1} 体")
-
     else:
         print("[Error] そのユーザ名は存在しません")
 
