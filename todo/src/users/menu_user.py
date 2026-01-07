@@ -6,11 +6,15 @@ from ..util import input_util
 
 
 def execute():
+    print()
     print("=== ユーザ管理 メニュー ===")
-    print_menu()
 
     while True:
+        print()
+        print_menu()
+        print()
         no = input_util.input_int("メニューを選択してください : ")
+        print()
         match no:
             case 1:
                 create_user.execute()
@@ -21,11 +25,11 @@ def execute():
             case 4:
                 delete_user.execute()
             case 5:
-                print("終了します")
                 break
             case _:
                 print("無効な値です")
-                print_menu()
+
+    print("終了します")
 
 
 def print_menu():

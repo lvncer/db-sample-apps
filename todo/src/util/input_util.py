@@ -91,6 +91,18 @@ def change_priority_to_string(priority: int) -> str | None:
             return None
 
 
+def change_priority_to_string_get_experience(priority: int) -> tuple[str, int] | None:
+    match priority:
+        case 1:
+            return "高", 30
+        case 2:
+            return "中", 20
+        case 3:
+            return "低", 10
+        case _:
+            return None
+
+
 def change_deadline_to_empty_string(deadline: datetime.date) -> str | datetime.date:
     if deadline == datetime.date(9999, 12, 31):
         return ""

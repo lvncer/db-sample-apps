@@ -1,107 +1,73 @@
 import mysql.connector
 import datetime
+
+from todo.src import todo_records
 from ..util import db_util
 from ..util import input_util
 from ..db import access_users
 from ..db import access_todo_records
 
 
-
 def execute():
     try:
-        # mysqlに接続
         cnx = db_util.connect()
-        # カーソルを作成
         cursor = cnx.cursor(dictionary=True)
 
         print("*** TODO完了確認 ***")
 
         name = input_util.input_replace("ユーザ名を入力してください : ")
 
-        # userテーブルに存在するかを確認する
-        user_rows = access_users.find_by_name_user(cursor, name)
-
-        # チェックして削除する
-        check_todo_records(user_rows, cursor, name, cnx)
+        user = access_users.find_by_name(cursor, name)
+        check_todo_records(cursor, user)
 
     except mysql.connector.Error as e:
         print("エラーが発生しました")
         print(e)
 
-    # 終了処理
+    else:
+        cnx.commit()
+
     finally:
         cursor.close()
         cnx.close()
 
 
-def check_todo_records(user_rows, cursor, name, cnx):
-    if len(user_rows) != 0:
-        todo_id = input_util.input_int('完了したtodoのIDを入力してください : ')
+def check_todo_records(cursor, user):
+    if user:
+        todo_id = input_util.input_int("完了したtodoのIDを入力してください : ")
 
-        todo_id_rows = access_todo_records.find_by_id_todo(
-            cursor, todo_id
-        )
+        todo_record = access_todo_records.find_by_id(cursor, todo_id)
+        if todo_record:
+            id = todo_record.id
+            title = todo_record.title
+            deadline = todo_record.deadline
+            priority = todo_record.priority
+            name = user.name
 
-        # todo_recordsに記録がが一件以上存在するならば削除を開始する
-        if len(todo_id_rows) != 0:
-            for row in todo_id_rows:
-                id = row['id']
-                title = row['title']
-                deadline = row['deadline']
-                priority = row['priority']
-
-                if deadline == datetime.date(9999, 12, 31):
-                    deadline = ''
-
-                if priority == 1:
-                    priority = '高'
-                    get_experience = 30
-                elif priority == 2:
-                    priority = '中'
-                    get_experience = 20
-                elif priority == 3:
-                    priority = '低'
-                    get_experience = 10
-
-                # 削除対象を表示
-                print(f"id: {id}")
-                print(f"日付: {deadline}")
-                print(f"タイトル: {title}")
-                print(f"優先度: {priority}")
-                print()
-
-            # 削除確認（Yを入力すると削除が確定される)
-            result_confirm = db_util.confirming(
-                "完了しましたか？ [y/n] : "
+            deadline = input_util.change_deadline_to_empty_string(deadline)
+            priority_str, get_experience = (
+                input_util.change_priority_to_string_get_experience(priority)
             )
+
+            print()
+            print(f"id: {id}")
+            print(f"日付: {deadline}")
+            print(f"タイトル: {title}")
+            print(f"優先度: {priority_str}")
             print()
 
-            # Yが入力されたならば削除を確定する
+            result_confirm = input_util.is_confirm("完了しましたか？ [y/n] : ")
+            print()
             if result_confirm:
-                # ユーザレベルの更新
-                access_users.update_experience(
-                    cursor, name, get_experience
-                )
+                access_users.update_experience(cursor, name, get_experience)
+                access_todo_records.delete_todo_records(cursor, id)
 
-                # 削除を確定する
-                access_todo_records.delete_todo_records(
-                    cursor, id
-                )
-
-                cnx.commit()
-
-                print(f'{get_experience} 経験値入手しました!')
-
-            # nが入力されたならば削除をキャンセルする
+                print(f"{get_experience} 経験値入手しました!")
             else:
                 print("完了確認をキャンセルしました")
-
-        # todo_recordsにtodo記録が存在しないならば以下を実行する
         else:
             print()
             print("[Error] そのidのTODOは記録されていません")
-
-    # usersテーブルにユーザが存在しないならば以下を実行する
     else:
         print("[Error] そのユーザ名は存在しません")
 

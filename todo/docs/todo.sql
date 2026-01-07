@@ -118,4 +118,3 @@ INSERT INTO enemies (name, level) VALUES
 ('Hydra', 28),
 ('Medusa', 29),
 ('Behemoth', 30);
-

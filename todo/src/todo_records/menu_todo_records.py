@@ -8,11 +8,13 @@ from . import check_todo_records
 
 
 def execute():
+    print()
     print("=== TODO管理 メニュー ===")
-    print_menu()
 
     while True:
+        print_menu()
         no = input_util.input_int("メニューを選択してください : ")
+        print()
         match no:
             case 1:
                 create_todo_record.execute()
@@ -27,14 +29,15 @@ def execute():
             case 6:
                 check_todo_records.execute()
             case 7:
-                print("終了します")
                 break
             case _:
                 print("無効な値です")
-                print_menu()
+
+    print("終了します")
 
 
 def print_menu():
+    print()
     print("1. TODO登録")
     print("2. TODO表示")
     print("3. TODO更新")
@@ -42,6 +45,7 @@ def print_menu():
     print("5. TODO出力")
     print("6. TODO終了報告")
     print("7. 終了")
+    print()
 
 
 if __name__ == "__main__":

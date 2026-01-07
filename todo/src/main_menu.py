@@ -1,6 +1,6 @@
 from .users import menu_user
 from .todo_records import menu_todo_records
-from .quests import menu_quest
+from .quests import main as quests_main
 from .util import input_util
 
 
@@ -10,9 +10,9 @@ def execute():
     print("###############")
     print()
     print("=== メイン メニュー ===")
-    print_menu()
 
     while True:
+        print_menu()
         no = input_util.input_int("メニューを選択してください : ")
         match no:
             case 1:
@@ -20,13 +20,13 @@ def execute():
             case 2:
                 menu_todo_records.execute()
             case 3:
-                menu_quest.execute()
+                quests_main.execute()
             case 4:
-                print("終了します")
                 break
             case _:
                 print("無効な値です")
-                print_menu()
+
+    print("終了します")
 
 
 def print_menu():
