@@ -11,7 +11,12 @@ def execute():
 
         print("*** ユーザ登録 ***")
 
-        name = input_util.input_replace("ユーザ名を入力してください : ")
+        while True:
+            name = input_util.input_replace("ユーザ名を入力してください : ")
+            if name == "":
+                print("ユーザ名は空にはできません。再度入力してください。")
+                continue
+            break
 
         user = access_users.find_by_name(cursor, name)
         if not user:
